@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\background.png" />
+    <Resource Include="dog.gif" />
+    <Resource Include="Images\Buttons\happy.png" />
+    <Resource Include="Images\Buttons\help.png" />
+    <Resource Include="icon.ico" />
+    <Resource Include="Images\Buttons\log-in.png" />
+    <Resource Include="Images\Buttons\next-week.png" />
+    <Resource Include="Images\Buttons\right.png" />
+    <Resource Include="Images\Buttons\vaccinated.png" />
+    <Resource Include="Images\vaccine.png" />
+  </ItemGroup>
+
+</Project>

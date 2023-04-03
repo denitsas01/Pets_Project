@@ -1,0 +1,135 @@
+﻿<Window x:Class="Pets_Project.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pets_Project"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="395" Width="640" ResizeMode="NoResize" Background="#FFBFD4ED" WindowStartupLocation="CenterScreen" Icon="/Images/vaccine.png">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Images/background.png" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <TabControl x:Name="tabControl" Background="{x:Null}">
+            <TabItem>
+                <TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="/Images/Buttons/happy.png" Width="35" Height="40"
+                               VerticalAlignment="Center" Cursor="Hand" />
+                        <TextBlock Grid.Column="1" Text="DogName"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </TabItem.Header>
+                <Grid>
+                    <TextBox x:Name="current_date" TextWrapping="Wrap" Margin="0,10,0,0" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="155" Height="29" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd"/>
+                    <Label x:Name="greetings" Content="Hi there, DogName!" Margin="0,39,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <Label x:Name="birthDate" Content="Birth Date" Margin="167,91,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Label x:Name="age" Content="Age" Margin="167,133,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Label x:Name="health" Content="Health Condition" Margin="167,177,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Button x:Name="save_btn" Content="Save" Margin="0,263,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="22" Width="70"/>
+                    <TextBox x:Name="textBox" TextWrapping="Wrap" Width="120" Margin="372,95,0,0" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBox x:Name="textBox_Copy" TextWrapping="Wrap" Width="120" Margin="372,137,0,0" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <RichTextBox x:Name="richTextBox" Margin="372,181,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Run Text="RichTextBox"/>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+
+                </Grid>
+            </TabItem>
+            <TabItem Cursor="Hand" Margin="-2,-2,-6,0">
+                <TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="/Images/Buttons/vaccinated.png" Width="35" Height="40"
+                               VerticalAlignment="Center" Cursor="Hand" />
+                        <TextBlock Grid.Column="1" Text="Received Vaccinations"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </TabItem.Header>
+                <Grid>
+                    <TextBox x:Name="current_date2" TextWrapping="Wrap" Margin="0,40,0,0" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="155" Height="29" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd"/>
+                    <RichTextBox Margin="137,40,77,112" Background="{x:Null}" BorderThickness="2,2,2,2">
+                        <FlowDocument>
+                            <List MarkerStyle="Disc">
+                            </List>
+                        </FlowDocument>
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Cursor="Hand" Margin="6,-2,-10,0">
+                <TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="/Images/Buttons/next-week.png" Width="35" Height="40"
+                               VerticalAlignment="Center" Cursor="Hand" />
+                        <TextBlock Grid.Column="1" Text="Upcoming Vaccinations"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <StackPanel Orientation="Vertical">
+                        <TextBox x:Name="current_date3" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" Width="80" Height="29" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd"/>
+                        <RichTextBox Height="140" Width="438">
+                            <FlowDocument>
+                                <List MarkerStyle="Disc">
+                                    <ListItem/>
+                                    <ListItem/>
+                                    <ListItem/>
+                                </List>
+                            </FlowDocument>
+                        </RichTextBox>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Cursor="Hand" Margin="10,-2,-34,0">
+                <TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="/Images/Buttons/help.png" Width="35" Height="40"
+                               VerticalAlignment="Center" Cursor="Hand" />
+                        <TextBlock Grid.Column="1" Text="Help"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </TabItem.Header>
+                <Grid>
+                    <DataGrid x:Name="dataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,49,0,0"/>
+                    
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="logout" Cursor="Hand" Margin="34,-2,-36,0" MouseLeftButtonDown="logout_MouseLeftButtonDown">
+                <TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="/Images/Buttons/right.png" Width="35" Height="40"
+                               VerticalAlignment="Center" Cursor="Hand" />
+                        <TextBlock Grid.Column="1" Text="Log out"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </TabItem.Header>
+                <Grid/>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

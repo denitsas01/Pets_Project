@@ -1,0 +1,28 @@
+﻿<Window x:Class="Pets_Project.RegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pets_Project"
+        mc:Ignorable="d"
+        Title="RegistrationWindow" Height="450" Width="800" Background="#FFBFD4ED" Icon="/Images/vaccine.png" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Label x:Name="email" Content="E-Mail" Margin="49,63,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="username_reg" Content="Username" Margin="40,106,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="password_reg" Content="Password" Margin="42,155,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.336,-0.385"/>
+        <Label x:Name="confirm_pass" Content="Confirm Password" Margin="40,195,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="pet_name" Content="Name of the pet" Margin="0,63,248,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Label x:Name="pet_type" Content="Is your pet a dog or a cat?" Margin="0,106,235,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Label x:Name="birth_date" Content="Choose date of birth." Margin="0,155,262,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <TextBox x:Name="email_tb" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="160,67,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="username_reg_tb" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="160,114,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="password_reg_tb" Width="120" Margin="160,155,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="confirm_password_tb" Width="120" Margin="160,199,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="pet_name_tb" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="0,67,84,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <RadioButton x:Name="radioButton_dog" Content="Dog" Margin="0,113,174,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <RadioButton x:Name="radioButton_cat" Content="Cat" Margin="0,111,54,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Calendar x:Name="calendar" Margin="0,147,54,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Button x:Name="button" Content="Register and continue to login." Margin="295,344,295,40" Click="button_Click"/>
+
+    </Grid>
+</Window>
