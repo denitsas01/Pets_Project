@@ -1,4 +1,4 @@
-USE [C:\USERS\PETYT\SOURCE\REPOS\PETS_PROJECT\PETS_PROJECT\PETS_DB.MDF]
+USE [D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf]
 GO
 
 /****** Object: Table [dbo].[pets_type] Script Date: 4/4/2023 4:19:36 PM ******/
