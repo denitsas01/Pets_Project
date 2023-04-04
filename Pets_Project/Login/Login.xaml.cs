@@ -16,12 +16,12 @@ namespace Pets_Project
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
 
+        public int petID { get; private set; }
+
         public Login()
         {
             InitializeComponent();
         }
-
-        int petID;
 
         private void register_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -30,7 +30,6 @@ namespace Pets_Project
             this.Hide();
         }
 
-        //
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -54,33 +53,31 @@ namespace Pets_Project
                     if(myReader.GetInt32(1) == 1)
                     {
                         this.Hide();
-                        MainWindow window = new MainWindow();
+                        MainWindow window = new MainWindow(petID);
                         BitmapImage bitmapImage = new BitmapImage();
 
-                        // Set the source of the BitmapImage to the path of the image file
                         bitmapImage.BeginInit();
                         bitmapImage.UriSource = new Uri("/Images/Buttons/happy.png", UriKind.Relative);
                         bitmapImage.EndInit();
 
-                        // Set the Source property of the Image control to the BitmapImage
                         window.petimg.Source = bitmapImage;
                         window.petName.Text = petName;
+                        petID = (int)myReader["pet_id"];
                         window.Show();
                     }
-                    else
+                    else if(myReader.GetInt32(1) == 2)
                     {
                         this.Hide();
-                        MainWindow window = new MainWindow();
+                        MainWindow window = new MainWindow(petID);
                         BitmapImage bitmapImage = new BitmapImage();
 
-                        // Set the source of the BitmapImage to the path of the image file
                         bitmapImage.BeginInit();
                         bitmapImage.UriSource = new Uri("/Images/Buttons/laughing.png", UriKind.Relative);
                         bitmapImage.EndInit();
 
-                        // Set the Source property of the Image control to the BitmapImage
                         window.petimg.Source = bitmapImage;
                         window.petName.Text = petName;
+                        petID = (int)myReader["pet_id"];
                         window.Show();
                     }
                 }
