@@ -18,7 +18,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Image Source="/Images/Buttons/happy.png" Width="35" Height="40"
+                        <Image x:Name="petimg" Source="/Images/Buttons/happy.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
                         <TextBlock Grid.Column="1" Text="DogName"
                                    VerticalAlignment="Center" />
