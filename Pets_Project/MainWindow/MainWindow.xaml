@@ -20,7 +20,7 @@
                         </Grid.ColumnDefinitions>
                         <Image x:Name="petimg" Source="/Images/Buttons/happy.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
-                        <TextBlock Grid.Column="1" Text="DogName"
+                        <TextBlock x:Name="petName" Grid.Column="1" Text="DogName"
                                    VerticalAlignment="Center" />
                     </Grid>
                 </TabItem.Header>

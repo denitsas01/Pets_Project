@@ -49,6 +49,7 @@ namespace Pets_Project
                 if (myReader.Read() == true)
                 {
                     petName = myReader.GetString(3);
+                    //TO DO - create a custom message box in order to style it
                     MessageBox.Show("Добре дошъл " + petName + " !");
                     if(myReader.GetInt32(1) == 1)
                     {
@@ -62,7 +63,8 @@ namespace Pets_Project
                         bitmapImage.EndInit();
 
                         // Set the Source property of the Image control to the BitmapImage
-                        window.petimg.Source = bitmapImage; 
+                        window.petimg.Source = bitmapImage;
+                        window.petName.Text = petName;
                         window.Show();
                     }
                     else
@@ -78,6 +80,7 @@ namespace Pets_Project
 
                         // Set the Source property of the Image control to the BitmapImage
                         window.petimg.Source = bitmapImage;
+                        window.petName.Text = petName;
                         window.Show();
                     }
                 }
