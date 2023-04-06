@@ -11,16 +11,16 @@
             <ImageBrush ImageSource="/Images/background.png" Stretch="UniformToFill"/>
         </Grid.Background>
         <TabControl x:Name="tabControl" Background="{x:Null}">
-            <TabItem>
+            <TabItem Margin="-5,-6,-29,0">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Image x:Name="petimg" Source="/Images/Buttons/happy.png" Width="35" Height="40"
-                               VerticalAlignment="Center" Cursor="Hand" />
-                        <TextBlock x:Name="Profile" Grid.Column="1" Text="DogName"
+                        <Image x:Name="petimg" Source="/Images/Buttons/happy.png" Height="40"
+                               VerticalAlignment="Center" Cursor="Hand" Margin="-10,0,5,0" />
+                        <TextBlock x:Name="petName" Grid.Column="1" Text="DogName"
                                    VerticalAlignment="Center" />
                     </Grid>
                 </TabItem.Header>
@@ -43,7 +43,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Cursor="Hand" Margin="-2,-2,-6,0">
+            <TabItem Cursor="Hand" Margin="24,-2,-40,0">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -52,7 +52,7 @@
                         </Grid.ColumnDefinitions>
                         <Image Source="/Images/Buttons/vaccinated.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
-                        <TextBlock Grid.Column="1" Text="Received Vaccinations"
+                        <TextBlock Grid.Column="1" Text="Всички ваксини"
                                    VerticalAlignment="Center" />
                     </Grid>
                 </TabItem.Header>
@@ -71,7 +71,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Cursor="Hand" Margin="6,-2,-10,0">
+            <TabItem Cursor="Hand" Margin="35,-2,-41,0">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -80,27 +80,28 @@
                         </Grid.ColumnDefinitions>
                         <Image Source="/Images/Buttons/next-week.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
-                        <TextBlock Grid.Column="1" Text="Upcoming Vaccinations"
+                        <TextBlock Grid.Column="1" Text="Предстоящи ваксини"
                                    VerticalAlignment="Center" />
                     </Grid>
                 </TabItem.Header>
                 <TabItem.Content>
-                    <StackPanel Orientation="Vertical">
-                        <TextBox x:Name="current_date3" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" Width="80" Height="29" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd"/>
-                        <RichTextBox Height="140" Width="438">
-                            <FlowDocument>
-                                <List MarkerStyle="Disc">
-                                    <ListItem/>
-                                    <ListItem/>
-                                    <ListItem/>
-                                </List>
-                            </FlowDocument>
-                        </RichTextBox>
-                    </StackPanel>
+                    <Grid>
+                        <TextBox x:Name="current_date3" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" Width="207" Height="35" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                        <DataGrid x:Name="dataGrid1" Height="183" AutoGenerateColumns="False" Width="511" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,50,0,0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding pet_name}" Width="70" Header="Име" CanUserResize="False" CanUserSort="False" CanUserReorder="False" IsReadOnly="True"/>
+                                <DataGridTextColumn Binding="{Binding type_name}" Width="80" Header="Куче/Котка" CanUserResize="False" CanUserSort="False" CanUserReorder="False" IsReadOnly="True"/>
+                                <DataGridTextColumn Binding="{Binding vacc_name}" Width="140" Header="Име на ваксина" CanUserResize="False" CanUserSort="False" CanUserReorder="False" IsReadOnly="True"/>
+                                <DataGridCheckBoxColumn Binding="{Binding isReceived}" Width="120" Header="Направена ли е?" CanUserResize="False" CanUserSort="False" CanUserReorder="False"/>
+                                <DataGridCheckBoxColumn Binding="{Binding vacc_id}" CanUserResize="False" Visibility="Hidden"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button x:Name="save_vaccs_button" Content="Запиши" IsDefault="True" Cursor="Hand" Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="47" Width="107" Click="save_vaccs_button_Click"/>
+                    </Grid>
                 </TabItem.Content>
             </TabItem>
 
-            <TabItem Cursor="Hand" Margin="10,-2,-34,0">
+            <TabItem Cursor="Hand" Margin="41,-2,-58,0">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -109,16 +110,40 @@
                         </Grid.ColumnDefinitions>
                         <Image Source="/Images/Buttons/help.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
-                        <TextBlock Grid.Column="1" Text="Help"
+                        <TextBlock Grid.Column="1" Text="Помощ"
                                    VerticalAlignment="Center" />
                     </Grid>
                 </TabItem.Header>
                 <Grid>
-                    <DataGrid x:Name="dataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,49,0,0"/>
+                    <DataGrid x:Name="dataGridHelp" Height="280" AutoGenerateColumns="False" Width="614" HorizontalAlignment="Center" VerticalAlignment="Center" Background="{x:Null}" ClipToBounds="True">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Куче/Котка">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding type_name}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Име на ваксина">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding vacc_name}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Описание на ваксината">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding vacc_desc}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
                 </Grid>
             </TabItem>
-            <TabItem x:Name="logout" Cursor="Hand" Margin="34,-2,-36,0" MouseLeftButtonDown="logout_MouseLeftButtonDown">
+            <TabItem x:Name="logout" Cursor="Hand" Margin="58,-2,-82,0" MouseLeftButtonDown="logout_MouseLeftButtonDown">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -127,7 +152,7 @@
                         </Grid.ColumnDefinitions>
                         <Image Source="/Images/Buttons/right.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
-                        <TextBlock Grid.Column="1" Text="Log out"
+                        <TextBlock Grid.Column="1" Text="Изход"
                                    VerticalAlignment="Center" />
                     </Grid>
                 </TabItem.Header>

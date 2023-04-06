@@ -1,10 +1,12 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics.Eventing.Reader;
+
+﻿using System.Data;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Data.SqlClient;
+
+
 
 namespace Pets_Project
 {
@@ -13,8 +15,14 @@ namespace Pets_Project
     /// </summary>
     public partial class Login : Window
     {
+
+        public string cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
+        public SqlConnection myConnection = default(SqlConnection);
+        public SqlCommand myCommand = default(SqlCommand);
+
         public int petID { get; private set; }
         public int petType { get; private set; }
+        
         public Login()
         {
             InitializeComponent();
@@ -46,14 +54,15 @@ namespace Pets_Project
                 myCommand.Parameters.Add(uName);
                 myCommand.Parameters.Add(uPassword);
                 myCommand.Connection.Open();
-                SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+                SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);                
                 String petName = "";
                 if (myReader.Read() == true)
                 {
                     petName = myReader.GetString(3);
                     //TO DO - create a custom message box in order to style it
                     MessageBox.Show("Добре дошъл " + petName + " !");
-                    if (myReader.GetInt32(1) == 1)
+                    if(myReader.GetInt32(1) == 1)
                     {
                         petType = 1;
                         this.Hide();
@@ -66,10 +75,10 @@ namespace Pets_Project
                         bitmapImage.EndInit();
 
                         window.petimg.Source = bitmapImage;
-                        window.Profile.Text = petName;
+                        window.petName.Text = petName;
                         window.Show();
                     }
-                    else if (myReader.GetInt32(1) == 2)
+                    else if(myReader.GetInt32(1) == 2)
                     {
                         petType = 2;
                         this.Hide();
@@ -82,12 +91,12 @@ namespace Pets_Project
                         bitmapImage.EndInit();
 
                         window.petimg.Source = bitmapImage;
-                        window.Profile.Text = petName;
+                        window.petName.Text = petName;
                         window.Show();
                     }
                 }
-                else
-                {
+                else{
+
                     MessageBox.Show("Неуспешен опит за вписване!", "Login Denied", MessageBoxButton.OK, MessageBoxImage.Error);
                     username_tb.Clear();
                     password_tb.Clear();
@@ -98,8 +107,8 @@ namespace Pets_Project
                     myConnection.Dispose();
                 }
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex){
+
                 MessageBox.Show(ex.Message, "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
