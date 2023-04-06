@@ -1,9 +1,12 @@
+
 ﻿using System.Data;
 using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Data.SqlClient;
+
+
 
 namespace Pets_Project
 {
@@ -12,17 +15,24 @@ namespace Pets_Project
     /// </summary>
     public partial class Login : Window
     {
+
         public string cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
 
         public int petID { get; private set; }
         public int petType { get; private set; }
-
+        
         public Login()
         {
             InitializeComponent();
         }
+
+        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\petyt\source\repos\Pets_Project\Pets_Project\pets_db3.mdf;Integrated Security=True";
+
+        public SqlConnection myConnection = default(SqlConnection);
+
+        public SqlCommand myCommand = default(SqlCommand);
 
         private void register_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -44,6 +54,7 @@ namespace Pets_Project
                 myCommand.Parameters.Add(uName);
                 myCommand.Parameters.Add(uPassword);
                 myCommand.Connection.Open();
+
                 SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);                
                 String petName = "";
                 if (myReader.Read() == true)
@@ -85,6 +96,7 @@ namespace Pets_Project
                     }
                 }
                 else{
+
                     MessageBox.Show("Неуспешен опит за вписване!", "Login Denied", MessageBoxButton.OK, MessageBoxImage.Error);
                     username_tb.Clear();
                     password_tb.Clear();
@@ -96,6 +108,7 @@ namespace Pets_Project
                 }
             }
             catch (Exception ex){
+
                 MessageBox.Show(ex.Message, "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

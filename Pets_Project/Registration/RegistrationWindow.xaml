@@ -14,13 +14,13 @@
         <Label x:Name="pet_name" Content="Name of the pet" Margin="0,63,248,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <Label x:Name="pet_type" Content="Is your pet a dog or a cat?" Margin="0,106,235,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <Label x:Name="birth_date" Content="Choose date of birth." Margin="0,155,262,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <TextBox x:Name="email_tb" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="160,67,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="username_reg_tb" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="160,114,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="email_tb" TextWrapping="Wrap" Width="120" Margin="160,67,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top" TextChanged="email_tb_TextChanged"/>
+        <TextBox x:Name="username_reg_tb" TextWrapping="Wrap" Width="120" Margin="160,114,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <PasswordBox x:Name="password_reg_tb" Width="120" Margin="160,155,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <PasswordBox x:Name="confirm_password_tb" Width="120" Margin="160,199,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="pet_name_tb" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="0,67,84,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <TextBox x:Name="pet_name_tb" TextWrapping="Wrap" Width="120" Margin="0,67,84,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <RadioButton x:Name="radioButton_dog" Content="Dog" Margin="0,113,174,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <RadioButton x:Name="radioButton_cat" Content="Cat" Margin="0,111,54,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <RadioButton x:Name="radioButton_cat" Content="Cat" Margin="0,112,84,0" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="0.294,0.741"/>
         <Calendar x:Name="calendar" Margin="0,147,54,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <Button x:Name="button" Content="Register and continue to login." Margin="295,344,295,40" Click="button_Click"/>
 
