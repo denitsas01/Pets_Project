@@ -12,7 +12,7 @@
         <Label x:Name="username" Content="Username" Margin="290,93,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Label x:Name="password" Content="Password" Margin="0,165,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <PasswordBox x:Name="password_tb" Width="120" Margin="0,196,0,0" Cursor="IBeam" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <TextBox x:Name="username_tb" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="0,124,0,0" Cursor="IBeam" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <TextBox x:Name="username_tb" x:FieldModifier="public" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="0,124,0,0" Cursor="IBeam" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <Label x:Name="register" Content="Don't have an account? Click here to register!" Margin="197,0,0,49" MouseLeftButtonDown="register_MouseLeftButtonDown" HorizontalAlignment="Left" VerticalAlignment="Bottom" Cursor="Hand"/>
         <Button HorizontalAlignment="Center" Margin="0,249,0,0" VerticalAlignment="Top" Width="140" Height="35" Click="Button_Click">
             <DockPanel HorizontalAlignment="Stretch">
