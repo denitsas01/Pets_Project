@@ -81,19 +81,19 @@
                     </Grid>
                 </TabItem.Header>
                 <TabItem.Content>
-                    <StackPanel x:Name="stackPanel" Orientation="Vertical">
-                        <TextBox x:Name="current_date3" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" Width="174" Height="29" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd" HorizontalAlignment="Left"/>
-                        <RichTextBox x:Name="richtextbo">
-                            <FlowDocument>
-                                <List MarkerStyle="Disc">
-                                    
-                                </List>
-                            </FlowDocument>
-                        </RichTextBox>
-
-
-
-                    </StackPanel>
+                    <Grid>
+                        <TextBox x:Name="current_date3" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" Width="207" Height="35" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                        <DataGrid x:Name="dataGrid1" Height="183" AutoGenerateColumns="False" Width="511" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,50,0,0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding pet_name}" Width="70" Header="Име" CanUserResize="False" CanUserSort="False" CanUserReorder="False" IsReadOnly="True"/>
+                                <DataGridTextColumn Binding="{Binding type_name}" Width="80" Header="Куче/Котка" CanUserResize="False" CanUserSort="False" CanUserReorder="False" IsReadOnly="True"/>
+                                <DataGridTextColumn Binding="{Binding vacc_name}" Width="140" Header="Име на ваксина" CanUserResize="False" CanUserSort="False" CanUserReorder="False" IsReadOnly="True"/>
+                                <DataGridCheckBoxColumn Binding="{Binding isReceived}" Width="120" Header="Направена ли е?" CanUserResize="False" CanUserSort="False" CanUserReorder="False"/>
+                                <DataGridCheckBoxColumn Binding="{Binding vacc_id}" CanUserResize="False" Visibility="Hidden"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button x:Name="save_vaccs_button" Content="Запиши" IsDefault="True" Cursor="Hand" Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="47" Width="107" Click="save_vaccs_button_Click"/>
+                    </Grid>
                 </TabItem.Content>
             </TabItem>
 
@@ -111,8 +111,31 @@
                     </Grid>
                 </TabItem.Header>
                 <Grid>
-                    <DataGrid x:Name="dataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,49,0,0"/>
-
+                    <DataGrid x:Name="dataGridHelp" Height="280" AutoGenerateColumns="False" Width="614" HorizontalAlignment="Center" VerticalAlignment="Center" Background="{x:Null}" ClipToBounds="True">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Куче/Котка">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding type_name}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Име на ваксина">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding vacc_name}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Описание на ваксината">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding vacc_desc}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem x:Name="logout" Cursor="Hand" Margin="58,-2,-82,0" MouseLeftButtonDown="logout_MouseLeftButtonDown">

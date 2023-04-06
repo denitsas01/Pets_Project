@@ -17,6 +17,7 @@ namespace Pets_Project
         public SqlCommand myCommand = default(SqlCommand);
 
         public int petID { get; private set; }
+        public int petType { get; private set; }
 
         public Login()
         {
@@ -35,7 +36,7 @@ namespace Pets_Project
             try
             {
                 myConnection = new SqlConnection(cs);
-                myCommand = new SqlCommand("SELECT pet_id, type_id, birthdate, pet_name, health FROM pets WHERE username=@username AND password=@password", myConnection);
+                myCommand = new SqlCommand(@"SELECT pet_id, type_id, birthdate, pet_name, health FROM pets WHERE username=@username AND password=@password", myConnection);
                 SqlParameter uName = new SqlParameter("@username", SqlDbType.VarChar);
                 SqlParameter uPassword = new SqlParameter("@password", SqlDbType.VarChar);
                 uName.Value = username_tb.Text;
@@ -52,8 +53,10 @@ namespace Pets_Project
                     MessageBox.Show("Добре дошъл " + petName + " !");
                     if(myReader.GetInt32(1) == 1)
                     {
+                        petType = 1;
                         this.Hide();
-                        MainWindow window = new MainWindow(petID);
+                        petID = (int)myReader["pet_id"];
+                        MainWindow window = new MainWindow(petID, petType);
                         BitmapImage bitmapImage = new BitmapImage();
 
                         bitmapImage.BeginInit();
@@ -62,13 +65,14 @@ namespace Pets_Project
 
                         window.petimg.Source = bitmapImage;
                         window.petName.Text = petName;
-                        petID = (int)myReader["pet_id"];
                         window.Show();
                     }
                     else if(myReader.GetInt32(1) == 2)
                     {
+                        petType = 2;
                         this.Hide();
-                        MainWindow window = new MainWindow(petID);
+                        petID = (int)myReader["pet_id"];
+                        MainWindow window = new MainWindow(petID, petType);
                         BitmapImage bitmapImage = new BitmapImage();
 
                         bitmapImage.BeginInit();
@@ -77,7 +81,6 @@ namespace Pets_Project
 
                         window.petimg.Source = bitmapImage;
                         window.petName.Text = petName;
-                        petID = (int)myReader["pet_id"];
                         window.Show();
                     }
                 }

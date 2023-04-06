@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections;
+using System.Configuration;
 
 namespace Pets_Project
 {
@@ -24,8 +26,16 @@ namespace Pets_Project
     public partial class MainWindow : Window
     {
         private int petID;
+        private int petType;
+        private int vaccID;
 
-        public MainWindow(int petID)
+        Login login = new Login();
+        SqlConnection myConnection;
+
+        List<int> vaccIDs = new List<int>(); // create a list to store the values of vacc_id
+
+
+        public MainWindow(int petID, int petType)
         {
             InitializeComponent();
 
@@ -35,14 +45,11 @@ namespace Pets_Project
             current_date3.Text = DateTime.Now.ToString("D");
 
             this.petID = petID;
+            this.petType = petType;
 
+            load_vaccines();
+            load_help_panel();
         }
-
-        Login login = new Login();
-        SqlConnection myConnection;
-        SqlCommand myCommand;
-        SqlDataAdapter adapt;
-
         private void logout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Login login = new Login();
@@ -50,64 +57,105 @@ namespace Pets_Project
             this.Close();
         }
 
-        private void mark_as_completed(object sender, EventArgs e)
+        private void load_vaccines ()
+        {
+            myConnection = new SqlConnection(login.cs);
+
+            using (myConnection)
+            {
+                myConnection.Open();
+
+                SqlCommand command = new SqlCommand("SELECT pets.pet_name AS pet_name, pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, vaccinations.vacc_id AS vacc_id "
+                     + "FROM pets "
+                     + "JOIN pets_type ON pets.type_id = pets_type.type_id "
+                     + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id " 
+                     + "WHERE pets.pet_id = @ID AND pets.type_id = @type", myConnection);
+                command.Parameters.Add(new SqlParameter("ID", petID));
+                command.Parameters.Add(new SqlParameter("type", petType));
+
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                DataTable dataTable = new DataTable();
+                dataTable.Columns.Add(new DataColumn("isReceived", typeof(bool)));
+                adapter.Fill(dataTable);
+
+                SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+                    vaccIDs.Add((int)reader["vacc_id"]); // add each value of vacc_id to the list
+                }
+
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    row["isReceived"] = false;
+
+                }
+                dataGrid1.ItemsSource = dataTable.DefaultView;
+
+                if (myConnection.State == ConnectionState.Open)
+                {
+                    myConnection.Dispose();
+                }
+            }
+        }
+
+        private void save_vaccs_button_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                myConnection = new SqlConnection(login.cs);
-                myCommand = new SqlCommand("SELECT vaccinations.vacc_name, received.isReceived FROM vaccinations JOIN received_vaccs ON vaccinations.vacc_id = received_vaccs.vacc_id WHERE received_vaccs.pet_id=@petID", myConnection);
-                SqlParameter pet_id = new SqlParameter("@petID", SqlDbType.Int);
-                pet_id.Value = petID;
-                myCommand.Parameters.Add(pet_id);
-
-                myCommand.Connection.Open();
-                SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
-
-                FlowDocument flowDocument = new FlowDocument();
-                List list = new List();
-                list.MarkerStyle = TextMarkerStyle.Disc;
-                Paragraph paragraph = new Paragraph();
-
-
-                // Loop through the rows in the result set and add each item to the bullet list
-                while (myReader.Read())
+                foreach (int id in vaccIDs)
                 {
-                    // Create a new ListItem to hold the checkbox and text
-                    ListItem listItem = new ListItem();
-
-                    // Create a new StackPanel to hold the checkbox and text
-                    StackPanel stackPanel = new StackPanel();
-
-                    // Create a new CheckBox and set its name and content
-                    CheckBox checkBox = new CheckBox();
-                    checkBox.Name = "checkbox" + myReader["isReceived"].ToString();
-
-                    // Create a new TextBlock and set its text
-                    TextBlock textBlock = new TextBlock();
-                    textBlock.Text = myReader["vacc_name"].ToString();
-
-                    // Add the CheckBox and TextBlock to the StackPanel
-                    stackPanel.Children.Add(textBlock);
-                    stackPanel.Children.Add(checkBox);
-
-                    paragraph.Inlines.Add(textBlock);
-                    paragraph.Inlines.Add(checkBox);
-                    // Set the StackPanel as the content of the ListItem
-                    listItem.Blocks.Add(paragraph);
-
-                    // Add the ListItem to the bullet list
-                    list.ListItems.Add(listItem);
+                    foreach (DataRowView rowView in dataGrid1.ItemsSource)
+                    {
+                        DataRow row = rowView.Row;
+                        bool isSelected = (bool)row["isReceived"];
+                        vaccID = (int)row["vacc_id"];
+                        if (isSelected && id == vaccID)
+                        {
+                            using (SqlConnection connection = new SqlConnection(login.cs))
+                            {
+                                connection.Open();
+                                SqlCommand command2 = new SqlCommand("INSERT INTO received_vaccs VALUES (@vacc_id, @pet_id, @isReceived)", connection);
+                                command2.Parameters.AddWithValue("@vacc_id", vaccID);
+                                command2.Parameters.AddWithValue("@pet_id", petID);
+                                command2.Parameters.AddWithValue("@isReceived", 1);
+                                command2.ExecuteNonQuery();
+                            }                            
+                        }
+                    } 
                 }
-
-                // Add the bullet list to the FlowDocument
-                flowDocument.Blocks.Add(list);
-
-                // Set the FlowDocument as the content of the RichTextBox
-                richTextBox.Document = flowDocument;
+                MessageBox.Show("Insert successfully!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void load_help_panel() {
+            myConnection = new SqlConnection(login.cs);
+
+            using (myConnection)
+            {
+                myConnection.Open();
+
+                SqlCommand commandHelp = new SqlCommand("SELECT pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, vaccinations.vacc_desc AS vacc_desc "
+                     + "FROM vaccinations "
+                     + "JOIN pets_type ON vaccinations.type_id = pets_type.type_id " 
+                     + "WHERE vaccinations.type_id = @pType", myConnection);
+                commandHelp.Parameters.Add(new SqlParameter("pType", petType));
+
+                SqlDataAdapter adapterHelp = new SqlDataAdapter(commandHelp);
+
+                DataTable dataTableHelp = new DataTable();
+                adapterHelp.Fill(dataTableHelp);
+
+                dataGridHelp.ItemsSource = dataTableHelp.DefaultView;
+
+                if (myConnection.State == ConnectionState.Open)
+                {
+                    myConnection.Dispose();
+                }
             }
         }
     }
