@@ -22,19 +22,17 @@ using System.Configuration;
 
 namespace Pets_Project
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private int petID;
         private int petType;
         private int vaccID;
+        private bool isSelected;
 
-        Login login = new Login();
         SqlConnection myConnection;
+        Login login = new Login();
 
-        List<int> vaccIDs = new List<int>(); // create a list to store the values of vacc_id
+        List<int> vaccIDs = new List<int>();
         public MainWindow(int petID, int petType)
         {
             InitializeComponent();
@@ -52,51 +50,29 @@ namespace Pets_Project
             load_help_panel();
             personal_info_load();
         }
-
-        //myCommand = new SqlCommand("SELECT [pet_name] FROM [dbo].[pets] WHERE username=@username AND password=@password", myConnection);
-        //SqlParameter uName = new SqlParameter("@username", SqlDbType.VarChar);
-        //SqlParameter uPassword = new SqlParameter("@password", SqlDbType.VarChar);
-        //var login = Application.Current.Windows.OfType<Login>().FirstOrDefault();
-        //uName.Value = login.username_tb.Text;
-        //uPassword.Value = login.password_tb.Password;
-        //myCommand.Parameters.Add(uName);
-        //myCommand.Parameters.Add(uPassword);
-        //myCommand.Connection.Open();
-        //SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
-        //if (myReader.Read() == true)
-        //{
-        //    greetings.Content = "Hi there, " + (string)myReader["pet_name"] + "!";
-        //    Profile.Text = (string)myReader["pet_name"];
-        //}
-        //if (myConnection.State == ConnectionState.Open)
-        //{
-        //    myConnection.Dispose();
-        //}
-
-        public SqlCommand myCommand = default(SqlCommand);
-
+        //logout panel 
         private void logout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Login login = new Login();
             login.Show();
             this.Close();
         }
-
+        //panel for upcoming vaccines content load
         private void load_vaccines()
-
-
         {
-            myConnection = new SqlConnection(login.cs);
 
+            myConnection = new SqlConnection(login.cs);
             using (myConnection)
             {
                 myConnection.Open();
 
-                SqlCommand command = new SqlCommand("SELECT pets.pet_name AS pet_name, pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, vaccinations.vacc_id AS vacc_id "
+                SqlCommand command = new SqlCommand("SELECT pets.pet_name AS pet_name, pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, " +
+                    "vaccinations.vacc_id AS vacc_id, received_vaccs.isReceived as isReceived "
                      + "FROM pets "
                      + "JOIN pets_type ON pets.type_id = pets_type.type_id "
                      + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id "
-                     + "WHERE pets.pet_id = @ID AND pets.type_id = @type", myConnection);
+                     + "JOIN received_vaccs ON vaccinations.vacc_id = received_vaccs.vacc_id "
+                     + "WHERE pets.pet_id = @ID AND pets.type_id = @type AND received_vaccs.isReceived = 0", myConnection);
                 command.Parameters.Add(new SqlParameter("ID", petID));
                 command.Parameters.Add(new SqlParameter("type", petType));
 
@@ -120,7 +96,42 @@ namespace Pets_Project
                 dataGrid1.ItemsSource = dataTable.DefaultView;
             }
         }
-
+        //button to mark a vaccine as received
+        private void save_vaccs_button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                foreach (int id in vaccIDs)
+                {
+                    foreach (DataRowView rowView in dataGrid1.ItemsSource)
+                    {
+                        DataRow row = rowView.Row;
+                        bool isSelected = (bool)row["isReceived"];
+                        vaccID = (int)row["vacc_id"];
+                        if (isSelected && id == vaccID)
+                        {
+                            using (SqlConnection connection = new SqlConnection(login.cs))
+                            {
+                                //query to insert to table received_vaccs
+                                connection.Open();
+                                SqlCommand command2 = new SqlCommand("UPDATE received_vaccs SET [isReceived] = 1 WHERE vacc_id=@vaccID", connection);
+                                command2.Parameters.AddWithValue("@vaccID", vaccID);
+                                command2.ExecuteNonQuery();
+                                connection.Close();
+                            }
+                        }
+                    }
+                }
+                load_vaccines();
+                load_receivedVaccs();
+                MessageBox.Show("Информацията е запазена!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        //received vaccs panel content load
         private void load_receivedVaccs() 
         {
             myConnection = new SqlConnection(login.cs);
@@ -128,12 +139,12 @@ namespace Pets_Project
             using (myConnection)
             {
                 myConnection.Open();
-                SqlCommand command = new SqlCommand("SELECT pets_type.type_name, vaccinations.vacc_name, vaccinations.vacc_desc " +
+                SqlCommand command = new SqlCommand("SELECT pets_type.type_name, vaccinations.vacc_name, received_vaccs.isReceived, received_vaccs.date_received AS vacc_date " +
                     " FROM received_vaccs " +
                     " JOIN pets ON received_vaccs.pet_id = pets.pet_id " +
                     " JOIN pets_type ON pets.type_id = pets_type.type_id " +
                     " JOIN vaccinations ON received_vaccs.vacc_id = vaccinations.vacc_id " +
-                    " WHERE pets.pet_id = @ID AND pets.type_id = @type ", myConnection);
+                    " WHERE pets.pet_id = @ID AND pets.type_id = @type AND received_vaccs.isReceived = 1 ", myConnection);
                 command.Parameters.Add(new SqlParameter("ID", petID));
                 command.Parameters.Add(new SqlParameter("type", petType));
 
@@ -152,15 +163,7 @@ namespace Pets_Project
 
             }
         }
-
-
-        
-
-        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
+        //personal info panel content load
         private void personal_info_load()
         {
             myConnection = new SqlConnection(login.cs);
@@ -171,20 +174,8 @@ namespace Pets_Project
                 DateTime dob = new DateTime();
                 myConnection.Open();
 
-                myCommand = new SqlCommand("SELECT birthdate, health, pet_name FROM pets WHERE pet_id=@petID", myConnection);
-                //SqlParameter uName = new SqlParameter("@username", SqlDbType.Text);
-                //SqlParameter uPassword = new SqlParameter("@password", SqlDbType.Text);
-                //var login = Application.Current.Windows.OfType<Login>().FirstOrDefault();
-                //uName.Value = login.username_tb.Text;
-                //uPassword.Value = login.password_tb.Password;
-                //myCommand.Parameters.AddWithValue("@username", uName);
-                //myCommand.Parameters.AddWithValue("@password", uPassword);
-
+                SqlCommand myCommand = new SqlCommand("SELECT birthdate, health, pet_name FROM pets WHERE pet_id=@petID", myConnection);
                 myCommand.Parameters.Add(new SqlParameter("petID", petID));
-
-
-                //myCommand.Parameters.Add(new SqlParameter("username",uName));
-                //myCommand.Parameters.Add(new SqlParameter("password",uPassword));
 
                 SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
                 if (myReader.Read() == true)
@@ -193,8 +184,7 @@ namespace Pets_Project
                     dob = (DateTime)myReader["birthdate"];
                     textBox.Text = dob.ToShortDateString();
                     textBox_Copy.Text = CalculateAge(dob).ToString();
-                    
-                    
+                                        
                     string healthFromDb = (string)myReader["health"];
                     richTextBox.Document.Blocks.Clear();
                     richTextBox.Document.Blocks.Add(new Paragraph(new Run(healthFromDb)));
@@ -207,40 +197,71 @@ namespace Pets_Project
             }
         }
 
-        private void save_vaccs_button_Click(object sender, RoutedEventArgs e)
+        //method to calculate the age of the animal
+        private string CalculateAge(DateTime dateOfBirth)
         {
-            try
+            DateTime today = DateTime.Today;
+
+            int ageInMonths = (today.Year - dateOfBirth.Year) * 12 + today.Month - dateOfBirth.Month;
+            int years = ageInMonths / 12;
+            int months = ageInMonths % 12;
+
+            if (years == 0 && months == 0)
             {
-                foreach (int id in vaccIDs)
-                {
-                    foreach (DataRowView rowView in dataGrid1.ItemsSource)
-                    {
-                        DataRow row = rowView.Row;
-                        bool isSelected = (bool)row["isReceived"];
-                        vaccID = (int)row["vacc_id"];
-                        if (isSelected && id == vaccID)
-                        {
-                            using (SqlConnection connection = new SqlConnection(login.cs))
-                            {
-                                connection.Open();
-                                SqlCommand command2 = new SqlCommand("INSERT INTO received_vaccs VALUES (@vacc_id, @pet_id, @isReceived)", connection);
-                                command2.Parameters.AddWithValue("@vacc_id", vaccID);
-                                command2.Parameters.AddWithValue("@pet_id", petID);
-                                command2.Parameters.AddWithValue("@isReceived", 1);
-                                command2.ExecuteNonQuery();
-                            }
-                        }
-                    }
-                }
-                MessageBox.Show("Информацията е запазена!");
+                return "0 години";
             }
-            catch (Exception ex)
+            else if (years == 0 && months > 0)
             {
-                MessageBox.Show(ex.Message, "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                return months + " месеца";
+            }
+            else if (years > 0 && months == 0)
+            {
+                return years + " години";
+            }
+            else
+            {
+                return years + " години " + months + " месеца";
             }
         }
 
-        private void load_help_panel() {
+        //update personal info method
+        private void save_btn_Click(object sender, RoutedEventArgs e)
+        {
+            myConnection = new SqlConnection(login.cs);
+
+            SqlCommand myCommand = new SqlCommand("UPDATE [dbo].[pets] SET [health] = N'" + StringFromRichTextBox(richTextBox) + "' WHERE pet_id=@petID", myConnection);
+            myCommand.Parameters.Add(new SqlParameter("petID", petID));
+            myCommand.Connection.Open();
+            string text=StringFromRichTextBox(richTextBox);
+            if (text!="")
+            { 
+                MessageBox.Show("Информацията е запазена!");
+            }
+            else //PROBLEM!!!
+            {
+                MessageBox.Show("Няма информация за запазване!");
+            }
+
+            if (myConnection.State == ConnectionState.Open)
+            {
+                myConnection.Dispose();
+            }
+
+        }
+
+        //Rich Text Box method
+        string StringFromRichTextBox(RichTextBox rtb)
+        {
+            TextRange textRange = new TextRange(
+                rtb.Document.ContentStart,
+                rtb.Document.ContentEnd
+            );
+            return textRange.Text;
+        }
+
+        //help panel content
+        private void load_help_panel()
+        {
             myConnection = new SqlConnection(login.cs);
 
             using (myConnection)
@@ -265,60 +286,6 @@ namespace Pets_Project
                     myConnection.Dispose();
                 }
             }
-        }
-
-        private static int CalculateAge(DateTime dateOfBirth)
-        {
-            int age = 0;
-            age = DateTime.Now.Year - dateOfBirth.Year;
-            if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)
-                age = age - 1;
-
-            return age;
-        }
-
-        private void save_btn_Click(object sender, RoutedEventArgs e)
-        {
-            myConnection = new SqlConnection(login.cs);
-
-            myCommand = new SqlCommand("UPDATE [dbo].[pets] SET [health] = N'" + StringFromRichTextBox(richTextBox) + "' WHERE pet_id=@petID", myConnection);
-            myCommand.Parameters.Add(new SqlParameter("petID", petID));
-            myCommand.Connection.Open();
-            //myCommand.ExecuteNonQuery();
-            string text=StringFromRichTextBox(richTextBox);
-            if (text!="")
-            { 
-                MessageBox.Show("Информацията е запазена!");
-            }
-            else //PROBLEM!!!
-            {
-                MessageBox.Show("Няма информация за запазване!");
-            }
-
-            if (myConnection.State == ConnectionState.Open)
-            {
-                myConnection.Dispose();
-            }
-
-        }
-
-        string StringFromRichTextBox(RichTextBox rtb)
-        {
-            TextRange textRange = new TextRange(
-                // TextPointer to the start of content in the RichTextBox.
-                rtb.Document.ContentStart,
-                // TextPointer to the end of content in the RichTextBox.
-                rtb.Document.ContentEnd
-            );
-
-            // The Text property on a TextRange object returns a string
-            // representing the plain text content of the TextRange.
-            return textRange.Text;
-        }
-
-        private void dataGrid2_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 

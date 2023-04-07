@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="Images\Buttons\laughing.png" />
+    <None Remove="Images\Buttons\turn-off.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
     <Resource Include="Images\Buttons\log-in.png" />
     <Resource Include="Images\Buttons\next-week.png" />
     <Resource Include="Images\Buttons\right.png" />
+    <Resource Include="Images\Buttons\turn-off.png" />
     <Resource Include="Images\Buttons\vaccinated.png" />
     <Resource Include="Images\vaccine.png" />
   </ItemGroup>

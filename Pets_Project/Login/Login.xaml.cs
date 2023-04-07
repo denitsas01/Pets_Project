@@ -10,12 +10,9 @@ using System.Data.SqlClient;
 
 namespace Pets_Project
 {
-    /// <summary>
-    /// Interaction logic for Login.xaml
-    /// </summary>
     public partial class Login : Window
     {
-
+        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
 
@@ -27,7 +24,6 @@ namespace Pets_Project
             InitializeComponent();
         }
 
-        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\petyt\source\repos\Pets_Project\Pets_Project\pets_db3.mdf;Integrated Security=True";
 
         private void register_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -41,7 +37,7 @@ namespace Pets_Project
             try
             {
                 myConnection = new SqlConnection(cs);
-                myCommand = new SqlCommand(@"SELECT pet_id, type_id, birthdate, pet_name, health FROM pets WHERE username=@username AND password=@password", myConnection);
+                myCommand = new SqlCommand(@"SELECT pet_id, type_id, pet_name FROM pets WHERE username=@username AND password=@password", myConnection);
                 SqlParameter uName = new SqlParameter("@username", SqlDbType.VarChar);
                 SqlParameter uPassword = new SqlParameter("@password", SqlDbType.VarChar);
                 uName.Value = username_tb.Text;
@@ -50,11 +46,11 @@ namespace Pets_Project
                 myCommand.Parameters.Add(uPassword);
                 myCommand.Connection.Open();
 
-                SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);                
+                SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
                 String petName = "";
-                if (myReader.Read() == true)
+                while(myReader.Read())
                 {
-                    petName = myReader.GetString(3);
+                    petName = myReader.GetString(2);
                     //TO DO - create a custom message box in order to style it
                     MessageBox.Show("Добре дошъл, " + petName + " !");
                     if(myReader.GetInt32(1) == 1)
@@ -90,13 +86,6 @@ namespace Pets_Project
                         window.Show();
                     }
                 }
-                else{
-
-                    MessageBox.Show("Неуспешен опит за вписване!", "Login Denied", MessageBoxButton.OK, MessageBoxImage.Error);
-                    username_tb.Clear();
-                    password_tb.Clear();
-                    username_tb.Focus();
-                }
                 if (myConnection.State == ConnectionState.Open)
                 {
                     myConnection.Dispose();
@@ -106,6 +95,11 @@ namespace Pets_Project
 
                 MessageBox.Show(ex.Message, "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void TurnOff_Button(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
