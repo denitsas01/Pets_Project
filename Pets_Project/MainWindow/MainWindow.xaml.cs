@@ -1,9 +1,10 @@
 ﻿using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
-using System.Globalization;
+using System.Data;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections;
+using System.Configuration;
 
 namespace Pets_Project
 {
@@ -24,12 +27,14 @@ namespace Pets_Project
     /// </summary>
     public partial class MainWindow : Window
     {
-
         private int petID;
-        //private int petType;
-        //private int vaccID;
+        private int petType;
+        private int vaccID;
 
         Login login = new Login();
+        SqlConnection myConnection;
+
+        List<int> vaccIDs = new List<int>(); // create a list to store the values of vacc_id
         public MainWindow(int petID, int petType)
         {
             InitializeComponent();
@@ -40,11 +45,12 @@ namespace Pets_Project
             current_date3.Text = DateTime.Now.ToString("D");
 
             this.petID = petID;
-            //this.petType = petType;
+            this.petType = petType;
 
             load_receivedVaccs();
             load_vaccines();
             load_help_panel();
+
             personal_info_load();
         }
 
@@ -78,6 +84,7 @@ namespace Pets_Project
         }
 
         private void load_vaccines()
+
         {
             myConnection = new SqlConnection(login.cs);
 
@@ -89,6 +96,7 @@ namespace Pets_Project
                      + "FROM pets "
                      + "JOIN pets_type ON pets.type_id = pets_type.type_id "
                      + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id "
+
                      + "WHERE pets.pet_id = @ID AND pets.type_id = @type", myConnection);
                 command.Parameters.Add(new SqlParameter("ID", petID));
                 command.Parameters.Add(new SqlParameter("type", petType));
@@ -145,6 +153,7 @@ namespace Pets_Project
 
             }
         }
+
 
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
