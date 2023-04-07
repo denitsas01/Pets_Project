@@ -13,6 +13,10 @@ namespace Pets_Project
     /// </summary>
     public partial class Login : Window
     {
+
+        public SqlConnection myConnection = default(SqlConnection);
+        public SqlCommand myCommand = default(SqlCommand);
+
         public int petID { get; private set; }
         public int petType { get; private set; }
         public Login()
@@ -21,10 +25,6 @@ namespace Pets_Project
         }
 
         public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\petyt\source\repos\Pets_Project\Pets_Project\pets_db3.mdf;Integrated Security=True";
-
-        public SqlConnection myConnection = default(SqlConnection);
-
-        public SqlCommand myCommand = default(SqlCommand);
 
         private void register_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -52,8 +52,8 @@ namespace Pets_Project
                 {
                     petName = myReader.GetString(3);
                     //TO DO - create a custom message box in order to style it
-                    MessageBox.Show("Добре дошъл " + petName + " !");
-                    if (myReader.GetInt32(1) == 1)
+                    MessageBox.Show("Добре дошъл, " + petName + " !");
+                    if(myReader.GetInt32(1) == 1)
                     {
                         petType = 1;
                         this.Hide();

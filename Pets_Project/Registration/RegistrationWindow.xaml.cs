@@ -52,7 +52,7 @@ namespace Pets_Project
 
 
             bool result = IsValidEmailAddress(email_tb.Text);
-            if (!result)
+            if (email_tb.Text!="" && !result)
             {
                 MessageBox.Show("Невалиден имейл адрес!");
                 email_tb.Clear(); 
