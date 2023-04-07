@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -19,37 +20,36 @@ using System.Windows.Shapes;
 
 namespace Pets_Project
 {
-    /// <summary>
-    /// Interaction logic for RegistrationWindow.xaml
-    /// </summary>
     public partial class RegistrationWindow : Window
     {
+        Login login = new Login();
+        SqlConnection myConnection;
+
         public RegistrationWindow()
         {
             InitializeComponent();
         }
-
-        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\petyt\source\repos\Pets_Project\Pets_Project\pets_db3.mdf;Integrated Security=True";
-
-        public SqlConnection myConnection = default(SqlConnection);
 
         public SqlCommand myCommand = default(SqlCommand);
 
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            int value = 0;
-            if ((bool)radioButton_dog.IsChecked)
-                value = 1;
-            else if((bool)radioButton_cat.IsChecked)
-                value = 2;
+            myConnection = new SqlConnection(login.cs);
+            int typeID = 0;
+            int petID = 0;
+            int vaccID = 0;
+            List<int> vaccIDs = new List<int>();
 
+            if ((bool)radioButton_dog.IsChecked)
+                typeID = 1;
+            else if((bool)radioButton_cat.IsChecked)
+                typeID = 2;
 
             if (password_reg_tb.Password != confirm_password_tb.Password) {
                 MessageBox.Show("Паролите не съвпадат!");
                 confirm_password_tb.Clear();
             }
-
 
             bool result = IsValidEmailAddress(email_tb.Text);
             if (email_tb.Text!="" && !result)
@@ -58,49 +58,69 @@ namespace Pets_Project
                 email_tb.Clear(); 
             }
 
-
             try
             {
                 if (String.IsNullOrEmpty(email_tb.Text) || String.IsNullOrEmpty(username_reg_tb.Text) ||
                     String.IsNullOrEmpty(password_reg_tb.ToString()) || String.IsNullOrEmpty(confirm_password_tb.ToString()) ||
-                    String.IsNullOrEmpty(pet_name_tb.Text) || String.IsNullOrEmpty(password_reg_tb.ToString()) || value == 0 ||
+                    String.IsNullOrEmpty(pet_name_tb.Text) || String.IsNullOrEmpty(password_reg_tb.ToString()) || typeID == 0 ||
                     String.IsNullOrEmpty(calendar.SelectedDate.Value.ToString()))
                 {
                     MessageBox.Show("Моля въведете данни във всички полета!");
                 }
                 else
                 {
-                    myConnection = new SqlConnection(cs);
-                    /*myCommand.CommandType = System.Data.CommandType.Text;
-                    myCommand.CommandText = "INSERT INTO [dbo].[pets] ([type_id], [username], [password], [birthdate], [pet_name], [email]) VALUES (" +
-                                        value + ", '" + username_reg_tb.Text + "', '" + password_reg_tb.Password + "', '" +
-                                        calendar.SelectedDate.Value.ToString("dd/MM/yyyy") + "', '" + pet_name_tb.Text + "', '" + email_tb.Text + "')";
-                    myCommand.Connection = myConnection;
-
-                    myConnection.Open();
-                    myCommand.ExecuteNonQuery();
-                    Login login = new Login();
-                    login.Show();
-                    this.Close();
-                    myConnection.Close();*/
-                    myCommand = new SqlCommand("INSERT INTO [dbo].[pets] ([type_id], [username], [password], [birthdate], [pet_name], [email]) VALUES (" +
-                        value + ", '" + username_reg_tb.Text + "', '" + password_reg_tb.Password + "', '" +
-                        calendar.SelectedDate.Value.ToString("dd/MM/yyyy") + "', N'" + pet_name_tb.Text + "', '" +
-                        email_tb.Text + "')", myConnection);
+                    myCommand = new SqlCommand("INSERT INTO [dbo].[pets] ([type_id], [username], [password], [birthdate], [pet_name], [health], [email]) " +
+                        "VALUES ( @petID, @username, @pass, @birthdate, @name, @health, @email )" , myConnection);
+                    myCommand.Parameters.AddWithValue("@petID", typeID);
+                    myCommand.Parameters.AddWithValue("@username", username_reg_tb.Text);
+                    myCommand.Parameters.AddWithValue("@pass", password_reg_tb.Password);
+                    myCommand.Parameters.AddWithValue("@birthdate", calendar.SelectedDate.Value);
+                    myCommand.Parameters.AddWithValue("@health", "няма");
+                    myCommand.Parameters.AddWithValue("@email", email_tb.Text);
+                    myCommand.Parameters.AddWithValue("@name", pet_name_tb.Text);
                     myCommand.Connection.Open();
                     SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
-                    /*if (myReader.Read() == true)
-                    { 
-                        MessageBox.Show("Your registration is successful!");
-                    }*/
-                    if (myConnection.State == ConnectionState.Open)
-                    {
-                        myConnection.Dispose();
+                    myCommand.Connection.Close();
+                    
+                    SqlCommand selectVacc = new SqlCommand("SELECT vacc_id FROM vaccinations WHERE type_id = @typeID", myConnection);
+                    selectVacc.Parameters.Add(new SqlParameter("typeID", typeID));
+                    selectVacc.Connection.Open();
+                    SqlDataReader reader = selectVacc.ExecuteReader(CommandBehavior.CloseConnection);
+                    while (reader.Read()) {
+                        vaccIDs.Add((int)reader["vacc_id"]);
                     }
+                    selectVacc.Connection.Close();
+
+                    SqlCommand selectPet = new SqlCommand("SELECT TOP 1 * FROM pets ORDER BY pet_id DESC", myConnection);
+                    selectPet.Connection.Open();
+                    SqlDataReader readerPet = selectPet.ExecuteReader(CommandBehavior.CloseConnection);
+                    while (readerPet.Read())
+                    {
+                        petID = (int)readerPet["pet_id"];
+                    }
+                    selectPet.Connection.Close();
+
+                    for (int i = 0; i < vaccIDs.Count; i++)
+                    {
+                        SqlCommand addToRV = new SqlCommand("INSERT INTO received_vaccs(vacc_id, pet_id, date_received, isReceived)" +
+                            "VALUES(@vaccID, @petID, @dateReceived, 0 )", myConnection);
+                        addToRV.Parameters.AddWithValue("@petID", petID);
+                        addToRV.Parameters.AddWithValue("@vaccID", vaccIDs[i]);
+                        addToRV.Parameters.AddWithValue("@dateReceived", DateTime.Now);
+                        addToRV.Connection.Open();
+                        addToRV.ExecuteNonQuery();
+                        addToRV.Connection.Close();
+                    }
+
                     MessageBox.Show("Your registration is successful!");
                     Login login = new Login();
                     login.Show();
                     this.Close();
+
+                    if (myConnection.State == ConnectionState.Open)
+                    {
+                        myConnection.Dispose();
+                    }
                 }
             }
             catch (Exception ex)
@@ -109,17 +129,21 @@ namespace Pets_Project
             }
         }
 
-
-
-        private void email_tb_TextChanged(object sender, TextChangedEventArgs e)
+        public bool IsValidEmailAddress(string email)
         {
-            
-        }
+            try
+            {
+                MailAddress m = new MailAddress(email);
 
-        public static bool IsValidEmailAddress(string email)
-        {
-            Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
-            return regex.IsMatch(email);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+
+            //Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+            //return regex.IsMatch(email);
         }
     }
 }

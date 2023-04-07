@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:Pets_Project"
         mc:Ignorable="d"
         
-    Title="MyPetHealth" Height="395" Width="640" Background="#FFBFD4ED" Icon="/Images/vaccine.png" WindowStartupLocation="CenterScreen">
+    Title="MyPetHealth" Height="395" Width="640" Background="#FFBFD4ED" Icon="/Images/vaccine.png" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize">
     <Grid>
-        <Label x:Name="title" Content="Вписване в MyPetHealth" Margin="212,35,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="18" Width="220" FontWeight="Bold"/>
+        <Label x:Name="title" Content="Вписване в MyPetHealth" Margin="0,55,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="18" Width="220" FontWeight="Bold"/>
         <Label x:Name="username" Content="Потребителско име" Margin="0,93,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="16" Width="156"/>
         <Label x:Name="password" Content="Парола" Margin="0,158,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="16" />
         <PasswordBox x:Name="password_tb" Width="120" Margin="0,189,0,0" Cursor="IBeam" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" FontFamily="Segoe UI Variable Display Light"/>
@@ -18,7 +18,11 @@
             <DockPanel HorizontalAlignment="Stretch">
                 <Image Source="/Images/Buttons/log-in.png" Stretch="Uniform" DockPanel.Dock="Left"/>
                 <Label Content="Вписване" DockPanel.Dock="Right" FontFamily="Segoe UI Variable Display Light" FontSize="20" Width="90" Height="32" />
-
+            </DockPanel>
+        </Button>
+        <Button x:Name="turn_off" HorizontalAlignment="Right" VerticalAlignment="Top" Width="50" Height="37" Click="TurnOff_Button" Cursor="Hand" Background="{x:Null}" BorderBrush="{x:Null}" Margin="0,10,10,0" Visibility ="Visible" >
+            <DockPanel>
+                <Image Source="/Images/Buttons/turn-off.png" Stretch="Uniform" DockPanel.Dock="Left"/>
             </DockPanel>
         </Button>
     </Grid>
