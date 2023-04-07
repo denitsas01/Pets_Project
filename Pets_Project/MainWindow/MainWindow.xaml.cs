@@ -50,7 +50,6 @@ namespace Pets_Project
             load_receivedVaccs();
             load_vaccines();
             load_help_panel();
-        }
             personal_info_load();
         }
 
@@ -83,7 +82,9 @@ namespace Pets_Project
             this.Close();
         }
 
-        private void load_vaccines ()
+        private void load_vaccines()
+
+
         {
             myConnection = new SqlConnection(login.cs);
 
@@ -94,7 +95,7 @@ namespace Pets_Project
                 SqlCommand command = new SqlCommand("SELECT pets.pet_name AS pet_name, pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, vaccinations.vacc_id AS vacc_id "
                      + "FROM pets "
                      + "JOIN pets_type ON pets.type_id = pets_type.type_id "
-                     + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id " 
+                     + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id "
                      + "WHERE pets.pet_id = @ID AND pets.type_id = @type", myConnection);
                 command.Parameters.Add(new SqlParameter("ID", petID));
                 command.Parameters.Add(new SqlParameter("type", petType));
@@ -152,6 +153,8 @@ namespace Pets_Project
             }
         }
 
+
+        
 
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
