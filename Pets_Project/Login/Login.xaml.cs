@@ -16,7 +16,6 @@ namespace Pets_Project
     public partial class Login : Window
     {
 
-
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
 
@@ -58,7 +57,6 @@ namespace Pets_Project
                     petName = myReader.GetString(3);
                     //TO DO - create a custom message box in order to style it
                     MessageBox.Show("Добре дошъл, " + petName + " !");
-
                     if(myReader.GetInt32(1) == 1)
                     {
                         petType = 1;

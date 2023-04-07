@@ -50,7 +50,7 @@ namespace Pets_Project
             load_receivedVaccs();
             load_vaccines();
             load_help_panel();
-
+        }
             personal_info_load();
         }
 
@@ -83,8 +83,7 @@ namespace Pets_Project
             this.Close();
         }
 
-        private void load_vaccines()
-
+        private void load_vaccines ()
         {
             myConnection = new SqlConnection(login.cs);
 
@@ -95,8 +94,7 @@ namespace Pets_Project
                 SqlCommand command = new SqlCommand("SELECT pets.pet_name AS pet_name, pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, vaccinations.vacc_id AS vacc_id "
                      + "FROM pets "
                      + "JOIN pets_type ON pets.type_id = pets_type.type_id "
-                     + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id "
-
+                     + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id " 
                      + "WHERE pets.pet_id = @ID AND pets.type_id = @type", myConnection);
                 command.Parameters.Add(new SqlParameter("ID", petID));
                 command.Parameters.Add(new SqlParameter("type", petType));
@@ -227,15 +225,15 @@ namespace Pets_Project
                                 command2.Parameters.AddWithValue("@pet_id", petID);
                                 command2.Parameters.AddWithValue("@isReceived", 1);
                                 command2.ExecuteNonQuery();
-                            }                            
+                            }
                         }
-                    } 
+                    }
                 }
                 MessageBox.Show("Информацията е запазена!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -248,7 +246,7 @@ namespace Pets_Project
 
                 SqlCommand commandHelp = new SqlCommand("SELECT pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, vaccinations.vacc_desc AS vacc_desc "
                      + "FROM vaccinations "
-                     + "JOIN pets_type ON vaccinations.type_id = pets_type.type_id " 
+                     + "JOIN pets_type ON vaccinations.type_id = pets_type.type_id "
                      + "WHERE vaccinations.type_id = @pType", myConnection);
                 commandHelp.Parameters.Add(new SqlParameter("pType", petType));
 
@@ -263,7 +261,7 @@ namespace Pets_Project
                 {
                     myConnection.Dispose();
                 }
-            }           
+            }
         }
 
         private static int CalculateAge(DateTime dateOfBirth)
