@@ -17,7 +17,8 @@
         <Button HorizontalAlignment="Center" Margin="0,249,0,0" VerticalAlignment="Top" Width="170" Height="35" Click="Button_Click" OpacityMask="#FF7B8BA7" Cursor="Hand">
             <DockPanel HorizontalAlignment="Stretch">
                 <Image Source="/Images/Buttons/log-in.png" Stretch="Uniform" DockPanel.Dock="Left"/>
-                <Label Content="Вписване" DockPanel.Dock="Right" FontFamily="Segoe UI Variable Display Light" FontSize="20" Width="90" />
+                <Label Content="Вписване" DockPanel.Dock="Right" FontFamily="Segoe UI Variable Display Light" FontSize="20" Width="90" Height="32" />
+
             </DockPanel>
         </Button>
     </Grid>

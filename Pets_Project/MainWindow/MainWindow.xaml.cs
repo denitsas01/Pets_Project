@@ -47,37 +47,32 @@ namespace Pets_Project
             this.petID = petID;
             this.petType = petType;
 
+            load_receivedVaccs();
             load_vaccines();
             load_help_panel();
-        }
+
             personal_info_load();
-
-            //myCommand = new SqlCommand("SELECT [pet_name] FROM [dbo].[pets] WHERE username=@username AND password=@password", myConnection);
-            //SqlParameter uName = new SqlParameter("@username", SqlDbType.VarChar);
-            //SqlParameter uPassword = new SqlParameter("@password", SqlDbType.VarChar);
-            //var login = Application.Current.Windows.OfType<Login>().FirstOrDefault();
-            //uName.Value = login.username_tb.Text;
-            //uPassword.Value = login.password_tb.Password;
-            //myCommand.Parameters.Add(uName);
-            //myCommand.Parameters.Add(uPassword);
-            //myCommand.Connection.Open();
-            //SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
-            //if (myReader.Read() == true)
-            //{
-            //    greetings.Content = "Hi there, " + (string)myReader["pet_name"] + "!";
-            //    Profile.Text = (string)myReader["pet_name"];
-            //}
-            //if (myConnection.State == ConnectionState.Open)
-            //{
-            //    myConnection.Dispose();
-            //}
-
-            
         }
 
-        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\petyt\source\repos\Pets_Project\Pets_Project\pets_db3.mdf;Integrated Security=True";
-
-        public SqlConnection myConnection = default(SqlConnection);
+        //myCommand = new SqlCommand("SELECT [pet_name] FROM [dbo].[pets] WHERE username=@username AND password=@password", myConnection);
+        //SqlParameter uName = new SqlParameter("@username", SqlDbType.VarChar);
+        //SqlParameter uPassword = new SqlParameter("@password", SqlDbType.VarChar);
+        //var login = Application.Current.Windows.OfType<Login>().FirstOrDefault();
+        //uName.Value = login.username_tb.Text;
+        //uPassword.Value = login.password_tb.Password;
+        //myCommand.Parameters.Add(uName);
+        //myCommand.Parameters.Add(uPassword);
+        //myCommand.Connection.Open();
+        //SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
+        //if (myReader.Read() == true)
+        //{
+        //    greetings.Content = "Hi there, " + (string)myReader["pet_name"] + "!";
+        //    Profile.Text = (string)myReader["pet_name"];
+        //}
+        //if (myConnection.State == ConnectionState.Open)
+        //{
+        //    myConnection.Dispose();
+        //}
 
         public SqlCommand myCommand = default(SqlCommand);
 
@@ -88,7 +83,8 @@ namespace Pets_Project
             this.Close();
         }
 
-        private void load_vaccines ()
+        private void load_vaccines()
+
         {
             myConnection = new SqlConnection(login.cs);
 
@@ -99,7 +95,8 @@ namespace Pets_Project
                 SqlCommand command = new SqlCommand("SELECT pets.pet_name AS pet_name, pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, vaccinations.vacc_id AS vacc_id "
                      + "FROM pets "
                      + "JOIN pets_type ON pets.type_id = pets_type.type_id "
-                     + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id " 
+                     + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id "
+
                      + "WHERE pets.pet_id = @ID AND pets.type_id = @type", myConnection);
                 command.Parameters.Add(new SqlParameter("ID", petID));
                 command.Parameters.Add(new SqlParameter("type", petType));
@@ -122,6 +119,40 @@ namespace Pets_Project
 
                 }
                 dataGrid1.ItemsSource = dataTable.DefaultView;
+            }
+        }
+
+        private void load_receivedVaccs() 
+        {
+            myConnection = new SqlConnection(login.cs);
+
+            using (myConnection)
+            {
+                myConnection.Open();
+                SqlCommand command = new SqlCommand("SELECT pets_type.type_name, vaccinations.vacc_name, vaccinations.vacc_desc " +
+                    " FROM received_vaccs " +
+                    " JOIN pets ON received_vaccs.pet_id = pets.pet_id " +
+                    " JOIN pets_type ON pets.type_id = pets_type.type_id " +
+                    " JOIN vaccinations ON received_vaccs.vacc_id = vaccinations.vacc_id " +
+                    " WHERE pets.pet_id = @ID AND pets.type_id = @type ", myConnection);
+                command.Parameters.Add(new SqlParameter("ID", petID));
+                command.Parameters.Add(new SqlParameter("type", petType));
+
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+
+                dataGrid2.ItemsSource = dataTable.DefaultView;
+
+                if (myConnection.State == ConnectionState.Open)
+                {
+                    myConnection.Dispose();
+                }
+
+            }
+        }
 
 
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -131,7 +162,7 @@ namespace Pets_Project
 
         private void personal_info_load()
         {
-            myConnection = new SqlConnection(cs);
+            myConnection = new SqlConnection(login.cs);
 
             using (myConnection)
             {
@@ -139,7 +170,7 @@ namespace Pets_Project
                 DateTime dob = new DateTime();
                 myConnection.Open();
 
-                myCommand = new SqlCommand("SELECT birthdate FROM pets WHERE pet_id=@petID", myConnection);
+                myCommand = new SqlCommand("SELECT birthdate, health, pet_name FROM pets WHERE pet_id=@petID", myConnection);
                 //SqlParameter uName = new SqlParameter("@username", SqlDbType.Text);
                 //SqlParameter uPassword = new SqlParameter("@password", SqlDbType.Text);
                 //var login = Application.Current.Windows.OfType<Login>().FirstOrDefault();
@@ -151,15 +182,22 @@ namespace Pets_Project
                 myCommand.Parameters.Add(new SqlParameter("petID", petID));
 
 
-                // myCommand.Parameters.Add(new SqlParameter("username",uName));
+                //myCommand.Parameters.Add(new SqlParameter("username",uName));
                 //myCommand.Parameters.Add(new SqlParameter("password",uPassword));
 
                 SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
                 if (myReader.Read() == true)
                 {
+                    greetings.Content = "Здравей, " + (string)myReader["pet_name"] + "!";
                     dob = (DateTime)myReader["birthdate"];
                     textBox.Text = dob.ToShortDateString();
                     textBox_Copy.Text = CalculateAge(dob).ToString();
+                    
+                    
+                    string healthFromDb = (string)myReader["health"];
+                    richTextBox.Document.Blocks.Clear();
+                    richTextBox.Document.Blocks.Add(new Paragraph(new Run(healthFromDb)));
+                    
                 }
                 if (myConnection.State == ConnectionState.Open)
                 {
@@ -240,21 +278,27 @@ namespace Pets_Project
 
         private void save_btn_Click(object sender, RoutedEventArgs e)
         {
-            myConnection = new SqlConnection(cs);
+            myConnection = new SqlConnection(login.cs);
 
             myCommand = new SqlCommand("UPDATE [dbo].[pets] SET [health] = N'" + StringFromRichTextBox(richTextBox) + "' WHERE pet_id=@petID", myConnection);
             myCommand.Parameters.Add(new SqlParameter("petID", petID));
             myCommand.Connection.Open();
-            myCommand.ExecuteNonQuery();
-            /*if (myReader.Read() == true)
+            //myCommand.ExecuteNonQuery();
+            string text=StringFromRichTextBox(richTextBox);
+            if (text!="")
             { 
-                MessageBox.Show("Your registration is successful!");
-            }*/
+                MessageBox.Show("Информацията е запазена!");
+            }
+            else //PROBLEM!!!
+            {
+                MessageBox.Show("Няма информация за запазване!");
+            }
+
             if (myConnection.State == ConnectionState.Open)
             {
                 myConnection.Dispose();
             }
-            
+
         }
 
         string StringFromRichTextBox(RichTextBox rtb)
@@ -270,5 +314,11 @@ namespace Pets_Project
             // representing the plain text content of the TextRange.
             return textRange.Text;
         }
+
+        private void dataGrid2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
+
 }
