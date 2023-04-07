@@ -231,7 +231,7 @@ namespace Pets_Project
                         }
                     } 
                 }
-                MessageBox.Show("Insert successfully!");
+                MessageBox.Show("Информацията е запазена!");
             }
             catch (Exception ex)
             {

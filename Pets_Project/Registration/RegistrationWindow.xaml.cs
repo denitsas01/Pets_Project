@@ -83,10 +83,11 @@ namespace Pets_Project
                     login.Show();
                     this.Close();
                     myConnection.Close();*/
-                    myCommand = new SqlCommand("INSERT INTO [dbo].[pets] ([type_id], [username], [password], [birthdate], [pet_name], [email]) VALUES (" +
+                    string hlth = "няма";
+                    myCommand = new SqlCommand("INSERT INTO [dbo].[pets] ([type_id], [username], [password], [birthdate], [pet_name], [health], [email]) VALUES (" +
                         value + ", '" + username_reg_tb.Text + "', '" + password_reg_tb.Password + "', '" +
                         calendar.SelectedDate.Value.ToString("dd/MM/yyyy") + "', N'" + pet_name_tb.Text + "', '" +
-                        email_tb.Text + "')", myConnection);
+                        email_tb.Text + "', N'" + hlth + "')", myConnection);
                     myCommand.Connection.Open();
                     SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
                     /*if (myReader.Read() == true)
