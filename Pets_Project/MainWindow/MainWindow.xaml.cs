@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections;
 using System.Configuration;
+using System.ComponentModel.Design;
 
 namespace Pets_Project
 {
@@ -50,6 +51,7 @@ namespace Pets_Project
             load_help_panel();
             personal_info_load();
         }
+
         //logout panel 
         private void logout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -57,10 +59,10 @@ namespace Pets_Project
             login.Show();
             this.Close();
         }
+
         //panel for upcoming vaccines content load
         private void load_vaccines()
         {
-
             myConnection = new SqlConnection(login.cs);
             using (myConnection)
             {
@@ -90,12 +92,13 @@ namespace Pets_Project
 
                 foreach (DataRow row in dataTable.Rows)
                 {
-                    row["isReceived"] = false;
+                    row["isReceived"] = false; // за checkbox-a
 
                 }
                 dataGrid1.ItemsSource = dataTable.DefaultView;
             }
         }
+
         //button to mark a vaccine as received
         private void save_vaccs_button_Click(object sender, RoutedEventArgs e)
         {
@@ -106,7 +109,8 @@ namespace Pets_Project
                     foreach (DataRowView rowView in dataGrid1.ItemsSource)
                     {
                         DataRow row = rowView.Row;
-                        bool isSelected = (bool)row["isReceived"];
+                        //bool isSelected = (bool)row["isReceived"];
+                        isSelected = (bool)row["isReceived"];
                         vaccID = (int)row["vacc_id"];
                         if (isSelected && id == vaccID)
                         {
@@ -131,6 +135,7 @@ namespace Pets_Project
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         //received vaccs panel content load
         private void load_receivedVaccs() 
         {
@@ -205,7 +210,7 @@ namespace Pets_Project
             int ageInMonths = (today.Year - dateOfBirth.Year) * 12 + today.Month - dateOfBirth.Month;
             int years = ageInMonths / 12;
             int months = ageInMonths % 12;
-
+            
             if (years == 0 && months == 0)
             {
                 return "0 години";
@@ -220,7 +225,7 @@ namespace Pets_Project
             }
             else
             {
-                return years + " години " + months + " месеца";
+                return years + " години и " + months + " месеца";
             }
         }
 
@@ -229,10 +234,12 @@ namespace Pets_Project
         {
             myConnection = new SqlConnection(login.cs);
 
-            SqlCommand myCommand = new SqlCommand("UPDATE [dbo].[pets] SET [health] = N'" + StringFromRichTextBox(richTextBox) + "' WHERE pet_id=@petID", myConnection);
+            SqlCommand myCommand = new SqlCommand("UPDATE pets SET [health] = N'" + StringFromRichTextBox(richTextBox) + "' WHERE pet_id=@petID", myConnection);
             myCommand.Parameters.Add(new SqlParameter("petID", petID));
             myCommand.Connection.Open();
-            string text=StringFromRichTextBox(richTextBox);
+            myCommand.ExecuteNonQuery();
+            myConnection.Close();
+            string text = StringFromRichTextBox(richTextBox);
             if (text!="")
             { 
                 MessageBox.Show("Информацията е запазена!");

@@ -82,6 +82,7 @@ namespace Pets_Project
                     SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
                     myCommand.Connection.Close();
                     
+                    //ако животното е куче, избираме всички ваксини за куче, същото е и за котките
                     SqlCommand selectVacc = new SqlCommand("SELECT vacc_id FROM vaccinations WHERE type_id = @typeID", myConnection);
                     selectVacc.Parameters.Add(new SqlParameter("typeID", typeID));
                     selectVacc.Connection.Open();
@@ -91,6 +92,7 @@ namespace Pets_Project
                     }
                     selectVacc.Connection.Close();
 
+                    //избираме последното регистрирано животно и го записваме в променливата
                     SqlCommand selectPet = new SqlCommand("SELECT TOP 1 * FROM pets ORDER BY pet_id DESC", myConnection);
                     selectPet.Connection.Open();
                     SqlDataReader readerPet = selectPet.ExecuteReader(CommandBehavior.CloseConnection);
@@ -100,19 +102,22 @@ namespace Pets_Project
                     }
                     selectPet.Connection.Close();
 
+                    //запазваме всяка от ваксините от списъка в таблица "направени ваксини",
+                    //като сетваме булевата променлива на false - тоест като ненаправена ваксина,
+                    //за да може да се зареждат в "Предстоящи ваксини"
                     for (int i = 0; i < vaccIDs.Count; i++)
                     {
                         SqlCommand addToRV = new SqlCommand("INSERT INTO received_vaccs(vacc_id, pet_id, date_received, isReceived)" +
                             "VALUES(@vaccID, @petID, @dateReceived, 0 )", myConnection);
                         addToRV.Parameters.AddWithValue("@petID", petID);
                         addToRV.Parameters.AddWithValue("@vaccID", vaccIDs[i]);
-                        addToRV.Parameters.AddWithValue("@dateReceived", DateTime.Now);
+                        addToRV.Parameters.AddWithValue("@dateReceived", DateTime.Now.ToShortTimeString());
                         addToRV.Connection.Open();
                         addToRV.ExecuteNonQuery();
                         addToRV.Connection.Close();
-                    }
+                    } 
 
-                    MessageBox.Show("Your registration is successful!");
+                    MessageBox.Show("Регистрацията Ви е успешна!");
                     Login login = new Login();
                     login.Show();
                     this.Close();
@@ -131,7 +136,7 @@ namespace Pets_Project
 
         public bool IsValidEmailAddress(string email)
         {
-            try
+            /*try
             {
                 MailAddress m = new MailAddress(email);
 
@@ -140,10 +145,10 @@ namespace Pets_Project
             catch (FormatException)
             {
                 return false;
-            }
+            }*/
 
-            //Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
-            //return regex.IsMatch(email);
+            Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+            return regex.IsMatch(email);
         }
     }
 }

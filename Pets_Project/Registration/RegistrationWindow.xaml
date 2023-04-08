@@ -7,22 +7,40 @@
         mc:Ignorable="d"
         Title="RegistrationWindow" Height="450" Width="800" Background="#FFBFD4ED" Icon="/Images/vaccine.png" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Label x:Name="email" Content="E-Mail" Margin="49,63,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label x:Name="username_reg" Content="Username" Margin="40,106,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label x:Name="password_reg" Content="Password" Margin="42,155,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.336,-0.385"/>
-        <Label x:Name="confirm_pass" Content="Confirm Password" Margin="40,195,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label x:Name="pet_name" Content="Name of the pet" Margin="0,63,248,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <Label x:Name="pet_type" Content="Is your pet a dog or a cat?" Margin="0,106,235,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <Label x:Name="birth_date" Content="Choose date of birth." Margin="0,155,262,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <TextBox x:Name="email_tb" TextWrapping="Wrap" Width="120" Margin="160,67,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="username_reg_tb" TextWrapping="Wrap" Width="120" Margin="160,114,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="password_reg_tb" Width="120" Margin="160,155,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="confirm_password_tb" Width="120" Margin="160,199,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="email" Content="Имейл" Margin="44,63,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="14" RenderTransformOrigin="1.063,0.586"/>
+        <Label x:Name="username_reg" Content="Потребителско име" Margin="44,131,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="14"/>
+        <Label x:Name="password_reg" Content="Парола" Margin="44,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.336,-0.385" FontFamily="Segoe UI Variable Display Light" FontSize="14"/>
+        <Label x:Name="confirm_pass" Content="Потвърди парола" Margin="44,273,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="14"/>
+        <Label x:Name="pet_name" Content="Име на домашния любимец" Margin="0,63,248,0" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="14"/>
+        <Label x:Name="pet_type" Content="Куче/котка?" Margin="0,106,344,0" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="14"/>
+        <Label x:Name="birth_date" Content="Изберете дата на раждане" Margin="0,148,257,0" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="14"/>
+        <TextBox x:Name="email_tb" TextWrapping="Wrap" Width="120" Margin="187,68,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="username_reg_tb" TextWrapping="Wrap" Width="120" Margin="187,136,0,0" Cursor="IBeam" InputScope="EmailUserName" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="password_reg_tb" Width="120" Margin="187,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <PasswordBox x:Name="confirm_password_tb" Width="120" Margin="187,278,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.499,2.499"/>
         <TextBox x:Name="pet_name_tb" TextWrapping="Wrap" Width="120" Margin="0,67,84,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <RadioButton x:Name="radioButton_dog" Content="Dog" Margin="0,113,174,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <RadioButton x:Name="radioButton_cat" Content="Cat" Margin="0,112,84,0" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="0.294,0.741"/>
+        <RadioButton x:Name="radioButton_dog" Content="Куче" Margin="0,113,174,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <RadioButton x:Name="radioButton_cat" Content="Котка" Margin="0,112,84,0" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="0.294,0.741"/>
         <Calendar x:Name="calendar" Margin="0,147,54,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Register and continue to login." Margin="295,344,295,40" Click="button_Click"/>
+        <Button x:Name="button" Content="Регистрирай се и продължи към вписване" Margin="220,347,220,37" Click="button_Click" OpacityMask="#FF7B8BA7" Cursor="Hand" FontSize="16" FontFamily="Segoe UI Variable Display" Foreground="DarkBlue">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#FF8A8CE3" Offset="1"/>
+                    <GradientStop Color="#FF0000BD" Offset="0"/>
+                    <GradientStop Color="#FF999BFA" Offset="0.92"/>
+                    <GradientStop Color="#FFDAD9C4" Offset="0"/>
+                </LinearGradientBrush>
+            </Button.Background>
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+
+        <Label Content="Регистрационна форма" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.062,0.598" FontFamily="Segoe UI Variable Display" FontSize="16"/>
 
     </Grid>
 </Window>

@@ -7,11 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="395" Width="640" ResizeMode="NoResize" Background="#FFBFD4ED" WindowStartupLocation="CenterScreen" Icon="/Images/vaccine.png">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="28*"/>
+            <ColumnDefinition Width="249*"/>
+            <ColumnDefinition Width="363*"/>
+        </Grid.ColumnDefinitions>
         <Grid.Background>
             <ImageBrush ImageSource="/Images/background.png" Stretch="UniformToFill"/>
         </Grid.Background>
-        <TabControl x:Name="tabControl" Background="{x:Null}">
-            <TabItem Margin="-5,-6,-29,0">
+        <TabControl x:Name="tabControl" Background="{x:Null}" Grid.ColumnSpan="3">
+            <TabItem Margin="-5,-6,-29,0" Background="#FFF4DEB3">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -20,17 +25,33 @@
                         </Grid.ColumnDefinitions>
                         <Image x:Name="petimg" Source="/Images/Buttons/happy.png" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" Margin="-10,0,5,0" />
-                        <TextBlock x:Name="petName" Grid.Column="1" Text="DogName"
+                        <TextBlock x:Name="petName" Grid.Column="1" Text="DogName" FontFamily="Segoe UI Variable Display"
                                    VerticalAlignment="Center" />
                     </Grid>
                 </TabItem.Header>
                 <Grid>
-                    <TextBox x:Name="current_date" TextWrapping="Wrap" Margin="10,10,0,0" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="155" Height="42" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd"/>
-                    <Label x:Name="greetings" Content="Hi there, DogName!" Margin="0,39,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                    <Label x:Name="birthDate" Content="Birth Date" Margin="167,91,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <Label x:Name="age" Content="Age" Margin="167,133,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <Label x:Name="health" Content="Health Condition" Margin="167,177,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <Button x:Name="save_btn" Content="Save" Margin="0,263,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="22" Width="70" Click="save_btn_Click"/>
+                    <TextBox x:Name="current_date" TextWrapping="Wrap" Margin="10,10,0,0" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="155" Height="42" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="date" FontFamily="Segoe UI Variable Display Light"/>
+                    <Label x:Name="greetings" Content="Hi there, DogName!" Margin="0,39,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light" FontSize="18"/>
+                    <Label x:Name="birthDate" Content="Рождена дата" Margin="127,90,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display" FontSize="14"/>
+                    <Label x:Name="age" Content="Възраст" Margin="127,132,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display" FontSize="14"/>
+                    <Label x:Name="health" Content="Здравословни проблеми" Margin="127,176,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display" FontSize="14" Width="190"/>
+                    <Button x:Name="save_btn" Content="Запази" Margin="0,263,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" Width="116" Click="save_btn_Click" OpacityMask="#FF7B8BA7" Cursor="Hand" FontSize="16" FontFamily="Segoe UI Variable Display" Foreground="DarkBlue">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="Black" Offset="0"/>
+                                <GradientStop Color="#FF8A8CE3" Offset="1"/>
+                                <GradientStop Color="#FF0000BD" Offset="0"/>
+                                <GradientStop Color="#FF999BFA" Offset="0.92"/>
+                                <GradientStop Color="#FFDAD9C4" Offset="0"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
                     <TextBox x:Name="textBox" TextWrapping="Wrap" Width="120" Margin="372,95,0,0" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <TextBox x:Name="textBox_Copy" TextWrapping="Wrap" Width="120" Margin="372,137,0,0" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <RichTextBox x:Name="richTextBox" Margin="372,181,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120">
@@ -43,7 +64,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Cursor="Hand" Margin="24,-2,-40,0">
+            <TabItem Cursor="Hand" Margin="24,-2,-40,0" Background="#FFF4DEB3">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -53,16 +74,16 @@
                         <Image Source="/Images/Buttons/vaccinated.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
                         <TextBlock Grid.Column="1" Text="Всички ваксини"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center" FontFamily="Segoe UI Variable Display" />
                     </Grid>
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="current_date2" TextWrapping="Wrap" Margin="10,10,0,0" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="155" Height="39" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd"/>
+                    <TextBox x:Name="current_date2" TextWrapping="Wrap" Margin="10,10,0,0" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Width="189" Height="39" FontSize="14" Text="date" FontFamily="Segoe UI Variable Display Light"/>
 
-                    <DataGrid x:Name="dataGrid2" Height="280" AutoGenerateColumns="False" Width="614" HorizontalAlignment="Center" VerticalAlignment="Top" Background="{x:Null}" ClipToBounds="True" Margin="0,31,0,0" IsReadOnly="True">
+                    <DataGrid x:Name="dataGrid2" Height="Auto" AutoGenerateColumns="False" Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#FFD7E2F0" ClipToBounds="True" IsReadOnly="True" Margin="0,54,0,0">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Куче/Котка">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -92,7 +113,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Cursor="Hand" Margin="35,-2,-41,0">
+            <TabItem Cursor="Hand" Margin="35,-2,-43,0" Background="#FFF4DEB3">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -102,13 +123,17 @@
                         <Image Source="/Images/Buttons/next-week.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
                         <TextBlock Grid.Column="1" Text="Предстоящи ваксини"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center" FontFamily="Segoe UI Variable Display" />
                     </Grid>
                 </TabItem.Header>
                 <TabItem.Content>
                     <Grid>
-                        <TextBox x:Name="current_date3" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" Width="207" Height="35" FontSize="14" FontWeight="Bold" FontStyle="Italic" Text="rgtfsfd" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                        <DataGrid x:Name="dataGrid1" Height="183" AutoGenerateColumns="False" Width="511" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,50,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120*"/>
+                            <ColumnDefinition Width="197*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="current_date3" Background="{x:Null}" IsReadOnly="True" BorderThickness="0,0,0,0" BorderBrush="Black" Width="207" Height="35" FontSize="14" Text="date" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Variable Display Light"/>
+                        <DataGrid x:Name="dataGrid1" Height="Auto" AutoGenerateColumns="False" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,50,0,0" Grid.ColumnSpan="2" Background="#FFD7E2F0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding pet_name}" Width="70" Header="Име" CanUserResize="False" CanUserSort="False" CanUserReorder="False" IsReadOnly="True"/>
                                 <DataGridTextColumn Binding="{Binding type_name}" Width="80" Header="Куче/Котка" CanUserResize="False" CanUserSort="False" CanUserReorder="False" IsReadOnly="True"/>
@@ -117,12 +142,28 @@
                                 <DataGridCheckBoxColumn Binding="{Binding vacc_id}" CanUserResize="False" Visibility="Hidden"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button x:Name="save_vaccs_button" Content="Запиши" IsDefault="True" Cursor="Hand" Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="47" Width="107" Click="save_vaccs_button_Click"/>
+                        <Button x:Name="save_vaccs_button" Content="Запази" IsDefault="True" Margin="0,0,264,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="33" Width="106" Click="save_vaccs_button_Click" Grid.Column="1" OpacityMask="#FF7B8BA7" Cursor="Hand" FontSize="16" FontFamily="Segoe UI Variable Display" Foreground="DarkBlue">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black" Offset="0"/>
+                                    <GradientStop Color="#FF8A8CE3" Offset="1"/>
+                                    <GradientStop Color="#FF0000BD" Offset="0"/>
+                                    <GradientStop Color="#FF999BFA" Offset="0.92"/>
+                                    <GradientStop Color="#FFDAD9C4" Offset="0"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
                     </Grid>
                 </TabItem.Content>
             </TabItem>
 
-            <TabItem Cursor="Hand" Margin="41,-2,-58,0">
+            <TabItem Cursor="Hand" Margin="41,-2,-60,0" Background="#FFF4DEB3">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -132,11 +173,11 @@
                         <Image Source="/Images/Buttons/help.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
                         <TextBlock Grid.Column="1" Text="Помощ"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center" FontFamily="Segoe UI Variable Display" />
                     </Grid>
                 </TabItem.Header>
                 <Grid>
-                    <DataGrid x:Name="dataGridHelp" Height="280" AutoGenerateColumns="False" Width="614" HorizontalAlignment="Center" VerticalAlignment="Center" Background="{x:Null}" ClipToBounds="True">
+                    <DataGrid x:Name="dataGridHelp" Height="202" AutoGenerateColumns="False" Width="614" HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True" Background="#FFD7E2F0">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Куче/Котка">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -164,7 +205,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem x:Name="logout" Cursor="Hand" Margin="58,-2,-82,0" MouseLeftButtonDown="logout_MouseLeftButtonDown">
+            <TabItem x:Name="logout" Cursor="Hand" Margin="58,-2,-93,0" MouseLeftButtonDown="logout_MouseLeftButtonDown" Background="#FFF4DEB3">
                 <TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -174,7 +215,7 @@
                         <Image Source="/Images/Buttons/right.png" Width="35" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" />
                         <TextBlock Grid.Column="1" Text="Изход"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center" FontFamily="Segoe UI Variable Display" />
                     </Grid>
                 </TabItem.Header>
                 <Grid>
@@ -185,6 +226,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
     </Grid>
+
 </Window>

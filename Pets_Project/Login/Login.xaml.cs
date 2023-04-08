@@ -12,7 +12,7 @@ namespace Pets_Project
 {
     public partial class Login : Window
     {
-        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
+        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\USERS\PETYT\SOURCE\REPOS\PETS_PROJECT\PETS_PROJECT\PETS_DB3.MDF;Integrated Security=True";
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
 
@@ -52,7 +52,7 @@ namespace Pets_Project
                 {
                     petName = myReader.GetString(2);
                     //TO DO - create a custom message box in order to style it
-                    MessageBox.Show("Добре дошъл, " + petName + " !");
+                    MessageBox.Show("Добре дошъл, " + petName + "!");
                     if(myReader.GetInt32(1) == 1)
                     {
                         petType = 1;
