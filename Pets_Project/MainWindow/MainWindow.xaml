@@ -21,9 +21,15 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
+<<<<<<< Updated upstream
                         <Image x:Name="petimg" Source="/Images/Buttons/happy.png" Height="40"
                                VerticalAlignment="Center" Cursor="Hand" Margin="-10,0,5,0" />
                         <TextBlock x:Name="petName" Grid.Column="1" Text="DogName" FontFamily="Segoe UI Variable Display"
+=======
+                        <Image x:Name="petimg" Source="/Images/Buttons/happy.png" Width="35" Height="40"
+                               VerticalAlignment="Center" Cursor="Hand" />
+                        <TextBlock Grid.Column="1" Text="DogName"
+>>>>>>> Stashed changes
                                    VerticalAlignment="Center" />
                     </Grid>
                 </TabItem.Header>

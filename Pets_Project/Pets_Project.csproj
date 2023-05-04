@@ -9,11 +9,17 @@
 
   <ItemGroup>
     <None Remove="Images\Buttons\laughing.png" />
+<<<<<<< Updated upstream
     <None Remove="Images\Buttons\turn-off.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+=======
+  </ItemGroup>
+
+  <ItemGroup>
+>>>>>>> Stashed changes
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
