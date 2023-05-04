@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 
 ﻿using System.Data;
 using System;
@@ -9,7 +8,6 @@ using System.Data.SqlClient;
 using System.Windows.Documents;
 using System.Collections;
 using System.Collections.Generic;
-=======
 ﻿using Microsoft.SqlServer.Server;
 using System.Data;
 using System;
@@ -18,13 +16,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
->>>>>>> Stashed changes
 
 namespace Pets_Project
 {
     public partial class Login : Window
     {
-<<<<<<< Updated upstream
         public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
@@ -32,22 +28,19 @@ namespace Pets_Project
         public int petID { get; private set; }
         public int petType { get; private set; }
         
-=======
+
         public string cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
 
->>>>>>> Stashed changes
         public Login()
         {
             InitializeComponent();
 
         }
 
-<<<<<<< Updated upstream
-=======
+
         int petID;
->>>>>>> Stashed changes
 
         private void register_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
