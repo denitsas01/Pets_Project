@@ -8,14 +8,12 @@
         Title="MainWindow" Height="395" Width="640" ResizeMode="NoResize" Background="#FFBFD4ED" WindowStartupLocation="CenterScreen" Icon="/Images/vaccine.png">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="28*"/>
-            <ColumnDefinition Width="249*"/>
-            <ColumnDefinition Width="363*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.Background>
             <ImageBrush ImageSource="/Images/background.png" Stretch="UniformToFill"/>
         </Grid.Background>
-        <TabControl x:Name="tabControl" Background="{x:Null}" Grid.ColumnSpan="3">
+        <TabControl x:Name="tabControl" Background="{x:Null}">
             <TabItem Margin="-5,-6,-29,0" Background="#FFF4DEB3">
                 <TabItem.Header>
                     <Grid>

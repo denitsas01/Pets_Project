@@ -111,7 +111,7 @@ namespace Pets_Project
                             "VALUES(@vaccID, @petID, @dateReceived, 0 )", myConnection);
                         addToRV.Parameters.AddWithValue("@petID", petID);
                         addToRV.Parameters.AddWithValue("@vaccID", vaccIDs[i]);
-                        addToRV.Parameters.AddWithValue("@dateReceived", DateTime.Now.ToShortTimeString());
+                        addToRV.Parameters.AddWithValue("@dateReceived", DateTime.Now);
                         addToRV.Connection.Open();
                         addToRV.ExecuteNonQuery();
                         addToRV.Connection.Close();

@@ -12,7 +12,7 @@ namespace Pets_Project
 {
     public partial class Login : Window
     {
-        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\USERS\PETYT\SOURCE\REPOS\PETS_PROJECT\PETS_PROJECT\PETS_DB3.MDF;Integrated Security=True";
+        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
 
@@ -84,6 +84,10 @@ namespace Pets_Project
                         window.petimg.Source = bitmapImage;
                         window.petName.Text = petName;
                         window.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Възникна грешка при вписване. Опитайте отново!", "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 if (myConnection.State == ConnectionState.Open)
