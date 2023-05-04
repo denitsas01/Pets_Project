@@ -21,17 +21,13 @@ namespace Pets_Project
 {
     public partial class Login : Window
     {
-        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
+        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\petyt\source\repos\Pets_Project\Pets_Project\pets_db3.mdf;Integrated Security=True";
         public SqlConnection myConnection = default(SqlConnection);
         public SqlCommand myCommand = default(SqlCommand);
 
         public int petID { get; private set; }
         public int petType { get; private set; }
         
-
-        public string cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
-        public SqlConnection myConnection = default(SqlConnection);
-        public SqlCommand myCommand = default(SqlCommand);
 
         public Login()
         {
@@ -40,7 +36,7 @@ namespace Pets_Project
         }
 
 
-        int petID;
+        //int petID;
 
         private void register_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -49,7 +45,6 @@ namespace Pets_Project
             this.Hide();
         }
 
-<<<<<<< Updated upstream
         private void sendReminders(int petID1, int petType1)
         {
             DateTime birthdate = DateTime.Now;
@@ -135,19 +130,14 @@ namespace Pets_Project
 
         }
 
-=======
-        //
->>>>>>> Stashed changes
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 myConnection = new SqlConnection(cs);
-<<<<<<< Updated upstream
                 myCommand = new SqlCommand(@"SELECT pet_id, type_id, pet_name FROM pets WHERE username=@username AND password=@password", myConnection);
-=======
+
                 myCommand = new SqlCommand("SELECT pet_id, type_id, birthdate, pet_name, health FROM pets WHERE username=@username AND password=@password", myConnection);
->>>>>>> Stashed changes
                 SqlParameter uName = new SqlParameter("@username", SqlDbType.VarChar);
                 SqlParameter uPassword = new SqlParameter("@password", SqlDbType.VarChar);
                 uName.Value = username_tb.Text;
@@ -155,24 +145,7 @@ namespace Pets_Project
                 myCommand.Parameters.Add(uName);
                 myCommand.Parameters.Add(uPassword);
                 myCommand.Connection.Open();
-<<<<<<< Updated upstream
 
-                SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
-                String petName = "";
-                while(myReader.Read())
-                {
-                    petName = myReader.GetString(2);
-                    //TO DO - create a custom message box in order to style it
-                    MessageBox.Show("Добре дошъл, " + petName + "!");
-                    if(myReader.GetInt32(1) == 1)
-                    {
-                        petType = 1;
-                        this.Hide();
-                        petID = (int)myReader["pet_id"];
-                        MainWindow window = new MainWindow(petID, petType);
-                        BitmapImage bitmapImage = new BitmapImage();
-
-=======
                 SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);                
                 String petName = "";
                 if (myReader.Read() == true)
@@ -182,16 +155,14 @@ namespace Pets_Project
                     if(myReader.GetInt32(1) == 1)
                     {
                         this.Hide();
-                        MainWindow window = new MainWindow();
+                        MainWindow window = new MainWindow(petID, petType);
                         BitmapImage bitmapImage = new BitmapImage();
 
                         // Set the source of the BitmapImage to the path of the image file
->>>>>>> Stashed changes
                         bitmapImage.BeginInit();
                         bitmapImage.UriSource = new Uri("/Images/Buttons/happy.png", UriKind.Relative);
                         bitmapImage.EndInit();
 
-<<<<<<< Updated upstream
                         window.petimg.Source = bitmapImage;
                         window.petName.Text = petName;
                         window.Show();
@@ -199,30 +170,15 @@ namespace Pets_Project
                     }
                     else if(myReader.GetInt32(1) == 2)
                     {
-                        petType = 2;
                         this.Hide();
-                        petID = (int)myReader["pet_id"];
                         MainWindow window = new MainWindow(petID, petType);
                         BitmapImage bitmapImage = new BitmapImage();
 
-=======
-                        // Set the Source property of the Image control to the BitmapImage
-                        window.petimg.Source = bitmapImage; 
-                        window.Show();
-                    }
-                    else
-                    {
-                        this.Hide();
-                        MainWindow window = new MainWindow();
-                        BitmapImage bitmapImage = new BitmapImage();
-
                         // Set the source of the BitmapImage to the path of the image file
->>>>>>> Stashed changes
                         bitmapImage.BeginInit();
                         bitmapImage.UriSource = new Uri("/Images/Buttons/laughing.png", UriKind.Relative);
                         bitmapImage.EndInit();
 
-<<<<<<< Updated upstream
                         window.petimg.Source = bitmapImage;
                         window.petName.Text = petName;
                         window.Show();
@@ -232,19 +188,12 @@ namespace Pets_Project
                     {
                         MessageBox.Show("Възникна грешка при вписване. Опитайте отново!", "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-=======
-                        // Set the Source property of the Image control to the BitmapImage
-                        window.petimg.Source = bitmapImage;
-                        window.Show();
-                    }
-                    
                 }
                 else{
                     MessageBox.Show("Неуспешен опит за вписване!", "Login Denied", MessageBoxButton.OK, MessageBoxImage.Error);
                     username_tb.Clear();
                     password_tb.Clear();
                     username_tb.Focus();
->>>>>>> Stashed changes
                 }
                 if (myConnection.State == ConnectionState.Open)
                 {
@@ -252,7 +201,6 @@ namespace Pets_Project
                 }
             }
             catch (Exception ex){
-<<<<<<< Updated upstream
 
                 MessageBox.Show(ex.Message, "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -261,10 +209,7 @@ namespace Pets_Project
         private void TurnOff_Button(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
-=======
-                MessageBox.Show(ex.Message, "Грешка!", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
->>>>>>> Stashed changes
         }
     }
 }
+
