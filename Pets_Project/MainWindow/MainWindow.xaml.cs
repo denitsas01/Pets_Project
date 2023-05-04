@@ -1,26 +1,11 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data;
-
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Collections;
-using System.Configuration;
-using System.ComponentModel.Design;
-using System.Reflection.PortableExecutable;
 
 namespace Pets_Project
 {
@@ -33,8 +18,8 @@ namespace Pets_Project
 
         SqlConnection myConnection;
         Login login = new Login();
-
         List<int> vaccIDs = new List<int>();
+
         public MainWindow(int petID, int petType)
         {
             InitializeComponent();
@@ -53,39 +38,12 @@ namespace Pets_Project
             personal_info_load();
         }
 
-            //logout panel 
-            private void logout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //logout panel 
+        private void logout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Login login = new Login();
             login.Show();
             this.Close();
-        }
-
-        public DataTable RemoveDuplicateRows(DataTable table, string DistinctColumn)
-        {
-            try
-            {
-                ArrayList UniqueRecords = new ArrayList();
-                ArrayList DuplicateRecords = new ArrayList();
-                foreach (DataRow dRow in table.Rows)
-                {
-                    if (UniqueRecords.Contains(dRow[DistinctColumn]))
-                        DuplicateRecords.Add(dRow);
-                    else
-                        UniqueRecords.Add(dRow[DistinctColumn]);
-                }
-
-                foreach (DataRow dRow in DuplicateRecords)
-                {
-                    table.Rows.Remove(dRow);
-                }
-
-                return table;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
         }
 
         //panel for upcoming vaccines content load
@@ -96,35 +54,37 @@ namespace Pets_Project
             {
                 myConnection.Open();
 
-                SqlCommand command = new SqlCommand("SELECT pets.pet_name AS pet_name, pets_type.type_name AS type_name, vaccinations.vacc_name AS vacc_name, " +
-                    "vaccinations.vacc_id AS vacc_id, received_vaccs.isReceived as isReceived "
-                     + "FROM pets "
-                     + "JOIN pets_type ON pets.type_id = pets_type.type_id "
-                     + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id "
-                     + "JOIN received_vaccs ON vaccinations.vacc_id = received_vaccs.vacc_id "
-                     + "WHERE pets.pet_id = @ID AND pets.type_id = @type AND received_vaccs.isReceived = 0", myConnection);
+                SqlCommand command = new SqlCommand("SELECT DISTINCT pets.pet_name AS pet_name, pets_type.type_name AS type_name, " +
+                    "vaccinations.vacc_name AS vacc_name, received_vaccs.isReceived as isReceived, vaccinations.vacc_id AS vacc_id " +
+                    "FROM pets " +
+                    "JOIN pets_type ON pets.type_id = pets_type.type_id " +
+                    "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id " +
+                    "JOIN received_vaccs ON vaccinations.vacc_id = received_vaccs.vacc_id " +
+                    "WHERE pets.pet_id = @ID AND pets.type_id = @type AND received_vaccs.isReceived = 0", myConnection);
                 command.Parameters.Add(new SqlParameter("ID", petID));
                 command.Parameters.Add(new SqlParameter("type", petType));
 
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
                 DataTable dataTable = new DataTable();
+                dataTable.Columns.Add(new DataColumn("pet_name", typeof(string)));
+                dataTable.Columns.Add(new DataColumn("type_name", typeof(string)));
+                dataTable.Columns.Add(new DataColumn("vacc_name", typeof(string)));
                 dataTable.Columns.Add(new DataColumn("isReceived", typeof(bool)));
                 adapter.Fill(dataTable);
-                DataTable dt = RemoveDuplicateRows(dataTable, "vacc_id");
-
 
                 SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 while (reader.Read())
                 {
                     vaccIDs.Add((int)reader["vacc_id"]); // add each value of vacc_id to the list
                 }
-
-                foreach (DataRow row in dt.Rows)
+                foreach (DataRow row in dataTable.Rows)
                 {
-                    row["isReceived"] = false; // за checkbox-a
+                    row["isReceived"] = false;
                 }
-                dataGrid1.ItemsSource = dt.DefaultView;
+                DataView dataview = new DataView(dataTable);
+                dataGrid1.ItemsSource = dataview;
+
             }
         }
 
@@ -171,7 +131,6 @@ namespace Pets_Project
         private void load_receivedVaccs() 
         {
             myConnection = new SqlConnection(login.cs);
-
             using (myConnection)
             {
                 myConnection.Open();
@@ -196,21 +155,20 @@ namespace Pets_Project
                 {
                     myConnection.Dispose();
                 }
-
             }
         }
+
         //personal info panel content load
         private void personal_info_load()
         {
             myConnection = new SqlConnection(login.cs);
-
             using (myConnection)
             {
                 string birthdate = "";
                 DateTime dob = new DateTime();
                 myConnection.Open();
 
-                SqlCommand myCommand = new SqlCommand("SELECT birthdate, health, pet_name FROM pets WHERE pet_id=@petID", myConnection);
+                SqlCommand myCommand = new SqlCommand("SELECT pet_id, birthdate, health, pet_name FROM pets WHERE pet_id=@petID", myConnection);
                 myCommand.Parameters.Add(new SqlParameter("petID", petID));
 
                 SqlDataReader myReader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
@@ -220,11 +178,9 @@ namespace Pets_Project
                     dob = (DateTime)myReader["birthdate"];
                     textBox.Text = dob.ToShortDateString();
                     textBox_Copy.Text = CalculateAge(dob).ToString();
-                                        
                     string healthFromDb = (string)myReader["health"];
                     richTextBox.Document.Blocks.Clear();
                     richTextBox.Document.Blocks.Add(new Paragraph(new Run(healthFromDb)));
-                    
                 }
                 if (myConnection.State == ConnectionState.Open)
                 {

@@ -1,29 +1,19 @@
 
-﻿using System.Data;
-using System;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Data.SqlClient;
-using System.Windows.Documents;
-using System.Collections;
-using System.Collections.Generic;
-﻿using Microsoft.SqlServer.Server;
 using System.Data;
 using System;
-using System.Data.SqlClient;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Data.SqlClient;
+using System.Collections.Generic;
 
 namespace Pets_Project
 {
     public partial class Login : Window
     {
-        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\petyt\source\repos\Pets_Project\Pets_Project\pets_db3.mdf;Integrated Security=True";
-        public SqlConnection myConnection = default(SqlConnection);
-        public SqlCommand myCommand = default(SqlCommand);
+        public String cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\UNI\3\3.2\USP\Pets_Project-master\Pets_Project\Database\PetsDB.mdf;Integrated Security=True";
+        public SqlConnection myConnection;
+        public SqlCommand myCommand;
 
         public int petID { get; private set; }
         public int petType { get; private set; }
@@ -34,9 +24,6 @@ namespace Pets_Project
             InitializeComponent();
 
         }
-
-
-        //int petID;
 
         private void register_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -61,15 +48,14 @@ namespace Pets_Project
                      + "JOIN vaccinations ON pets_type.type_id = vaccinations.type_id "
                      + "JOIN received_vaccs ON vaccinations.vacc_id = received_vaccs.vacc_id "
                      + "WHERE pets.pet_id = @ID AND pets.type_id = @type AND received_vaccs.isReceived = 0", myConnection);
-                command1.Parameters.Add(new SqlParameter("ID", petID));
-                command1.Parameters.Add(new SqlParameter("type", petType));
+                command1.Parameters.Add(new SqlParameter("ID", petID1));
+                command1.Parameters.Add(new SqlParameter("type", petType1));
 
                 SqlDataReader reader1 = command1.ExecuteReader(CommandBehavior.CloseConnection);
                 if (reader1.Read())
                 {
                     birthdate = (DateTime)reader1["birthdate"];
                 }
-
                 myConnection.Close();
 
                 myConnection.Open();
@@ -87,47 +73,57 @@ namespace Pets_Project
                 while (reader.Read())
                 {
                     notReceivedVaccs.Add((int)reader["vacc_id"]);
-                    isReceived = (bool)reader["isReceived"];
+                    isReceived = false;
                 }
-
                 myConnection.Close();
-
             }
 
-            for (int vaccID = 0; vaccID < notReceivedVaccs.Count; vaccID++)
+            Dictionary<int, Tuple<int, int>> ageRanges = new Dictionary<int, Tuple<int, int>> { 
+                { 1, Tuple.Create(45, 50) },
+                { 2, Tuple.Create(56, 63) },
+                { 3, Tuple.Create(85, 93) },
+                { 4, Tuple.Create(450, 458) },
+                { 5, Tuple.Create(56, 63) },
+                { 6, Tuple.Create(85, 93) },
+                { 8, Tuple.Create(450, 458) },
+            };
+
+            foreach (int vaccID in notReceivedVaccs)
             {
-                int difference = (int)(DateTime.Now - birthdate).TotalDays;
+                if (ageRanges.ContainsKey(vaccID))
+                {
+                    Tuple<int, int> ageRange = ageRanges[vaccID];
+                    int difference = (int)(DateTime.Now - birthdate).TotalDays;
 
-                if (petType1 == 1 && notReceivedVaccs.IndexOf(vaccID) == 1 && difference >= 45 && difference <= 50 && isReceived == false)
-                {
-                    MessageBox.Show("Време за първа ваксина!");
-                }
-                else if (petType1 == 1 && notReceivedVaccs.IndexOf(vaccID) == 2 && difference >= 56 && difference <= 63 && isReceived == false)
-                {
-                    MessageBox.Show("Време за втора ваксина!");
-                }
-                else if (petType1 == 1 && notReceivedVaccs.IndexOf(vaccID) == 3 && difference >= 85 && difference <= 93 && isReceived == false)
-                {
-                    MessageBox.Show("Време за трета ваксина!");
-                }
-                else if (petType1 == 1 && notReceivedVaccs.IndexOf(vaccID) == 4 && difference >= 450 && difference >= 458 && isReceived == false)
-                {
-                    MessageBox.Show("Време за годишна ваксина!");
-                }
-                else if (petType1 == 2 && notReceivedVaccs.IndexOf(vaccID) == 5 && difference >= 56 && difference <= 63 && isReceived == false)
-                {
-                    MessageBox.Show("Време за първа ваксина!");
-                }
-                else if (petType1 == 2 && notReceivedVaccs.IndexOf(vaccID) == 6 && difference >= 85 && difference <= 93 && isReceived == false)
-                {
-                    MessageBox.Show("Време за втора ваксина!");
-                }
-                else if (petType1 == 2 && notReceivedVaccs.IndexOf(vaccID) == 8 && difference >= 450 && difference >= 458 && isReceived == false)
-                {
-                    MessageBox.Show("Време за годишна ваксина!");
+                    if (difference >= ageRange.Item1 && difference <= ageRange.Item2 && isReceived == false)
+                    {
+                        switch (vaccID)
+                        {
+                            case 1:
+                                MessageBox.Show("Време за първа ваксина!");
+                                break;
+                            case 2:
+                                MessageBox.Show("Време за втора ваксина!");
+                                break;
+                            case 3:
+                                MessageBox.Show("Време за трета ваксина!");
+                                break;
+                            case 4:
+                                MessageBox.Show("Време за годишна ваксина!");
+                                break;
+                            case 5:
+                                MessageBox.Show("Време за първа ваксина!");
+                                break;
+                            case 6:
+                                MessageBox.Show("Време за втора ваксина!");
+                                break;
+                            case 7:
+                                MessageBox.Show("Време за годишна ваксина!");
+                                break;
+                        }
+                    }
                 }
             }
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -135,8 +131,6 @@ namespace Pets_Project
             try
             {
                 myConnection = new SqlConnection(cs);
-                myCommand = new SqlCommand(@"SELECT pet_id, type_id, pet_name FROM pets WHERE username=@username AND password=@password", myConnection);
-
                 myCommand = new SqlCommand("SELECT pet_id, type_id, birthdate, pet_name, health FROM pets WHERE username=@username AND password=@password", myConnection);
                 SqlParameter uName = new SqlParameter("@username", SqlDbType.VarChar);
                 SqlParameter uPassword = new SqlParameter("@password", SqlDbType.VarChar);
@@ -150,10 +144,12 @@ namespace Pets_Project
                 String petName = "";
                 if (myReader.Read() == true)
                 {
+                    petID = (int)myReader["pet_id"];
                     petName = myReader.GetString(3);
-                    MessageBox.Show("Добре дошъл " + petName + " !");
+                    MessageBox.Show("Добре дошъл, " + petName + " !");
                     if(myReader.GetInt32(1) == 1)
                     {
+                        petType = 1;
                         this.Hide();
                         MainWindow window = new MainWindow(petID, petType);
                         BitmapImage bitmapImage = new BitmapImage();
@@ -170,6 +166,7 @@ namespace Pets_Project
                     }
                     else if(myReader.GetInt32(1) == 2)
                     {
+                        petType = 2;
                         this.Hide();
                         MainWindow window = new MainWindow(petID, petType);
                         BitmapImage bitmapImage = new BitmapImage();
