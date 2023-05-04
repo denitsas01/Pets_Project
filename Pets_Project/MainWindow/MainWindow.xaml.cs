@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using System.Collections;
 using System.Configuration;
 using System.ComponentModel.Design;
+using System.Reflection.PortableExecutable;
 
 namespace Pets_Project
 {
@@ -52,12 +53,39 @@ namespace Pets_Project
             personal_info_load();
         }
 
-        //logout panel 
-        private void logout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+            //logout panel 
+            private void logout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Login login = new Login();
             login.Show();
             this.Close();
+        }
+
+        public DataTable RemoveDuplicateRows(DataTable table, string DistinctColumn)
+        {
+            try
+            {
+                ArrayList UniqueRecords = new ArrayList();
+                ArrayList DuplicateRecords = new ArrayList();
+                foreach (DataRow dRow in table.Rows)
+                {
+                    if (UniqueRecords.Contains(dRow[DistinctColumn]))
+                        DuplicateRecords.Add(dRow);
+                    else
+                        UniqueRecords.Add(dRow[DistinctColumn]);
+                }
+
+                foreach (DataRow dRow in DuplicateRecords)
+                {
+                    table.Rows.Remove(dRow);
+                }
+
+                return table;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         //panel for upcoming vaccines content load
@@ -83,6 +111,8 @@ namespace Pets_Project
                 DataTable dataTable = new DataTable();
                 dataTable.Columns.Add(new DataColumn("isReceived", typeof(bool)));
                 adapter.Fill(dataTable);
+                DataTable dt = RemoveDuplicateRows(dataTable, "vacc_id");
+
 
                 SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 while (reader.Read())
@@ -90,18 +120,18 @@ namespace Pets_Project
                     vaccIDs.Add((int)reader["vacc_id"]); // add each value of vacc_id to the list
                 }
 
-                foreach (DataRow row in dataTable.Rows)
+                foreach (DataRow row in dt.Rows)
                 {
                     row["isReceived"] = false; // за checkbox-a
-
                 }
-                dataGrid1.ItemsSource = dataTable.DefaultView;
+                dataGrid1.ItemsSource = dt.DefaultView;
             }
         }
 
         //button to mark a vaccine as received
         private void save_vaccs_button_Click(object sender, RoutedEventArgs e)
         {
+            DateTime currentDate = DateTime.Now;
             try
             {
                 foreach (int id in vaccIDs)
@@ -118,8 +148,9 @@ namespace Pets_Project
                             {
                                 //query to insert to table received_vaccs
                                 connection.Open();
-                                SqlCommand command2 = new SqlCommand("UPDATE received_vaccs SET [isReceived] = 1 WHERE vacc_id=@vaccID", connection);
+                                SqlCommand command2 = new SqlCommand("UPDATE received_vaccs SET [isReceived] = 1, [date_received] = @currentDate WHERE vacc_id=@vaccID", connection);
                                 command2.Parameters.AddWithValue("@vaccID", vaccID);
+                                command2.Parameters.AddWithValue("@currentDate", currentDate);
                                 command2.ExecuteNonQuery();
                                 connection.Close();
                             }
